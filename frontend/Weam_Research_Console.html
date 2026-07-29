@@ -1,0 +1,2421 @@
+<meta charset="UTF-8">
+<title>Weam Research Console — Home Services Vertical</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ground: #F5F6F8;
+    --ground-2: #EDEFF3;
+    --card: #FFFFFF;
+    --ink: #14171C;
+    --ink-2: #3B4048;
+    --ink-muted: #6B7078;
+    --border: #DCE0E6;
+    --border-strong: #C4C9D2;
+    --accent: #1A6E58;
+    --accent-2: #14513F;
+    --accent-soft: #E4EEEA;
+    --warn: #C77A2E;
+    --warn-soft: #F5EADB;
+    --pass: #2D8659;
+    --pass-soft: #DEEEDF;
+    --fail: #B7503B;
+    --fail-soft: #F1DEDA;
+    --highlight: #FFF3BF;
+    --fact: #1A6E58;
+    --assumption: #C77A2E;
+    --hypothesis: #6B54A3;
+    --fact-soft: #E4EEEA;
+    --assumption-soft: #F5EADB;
+    --hypothesis-soft: #ECE7F5;
+    --shadow: 0 1px 0 rgba(20,23,28,.03), 0 8px 24px -12px rgba(20,23,28,.08);
+    --radius: 6px;
+    --radius-lg: 10px;
+
+    --font-display: Georgia, "Iowan Old Style", "Palatino", ui-serif, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+    --step-1: 12px;
+    --step-2: 13px;
+    --step-3: 15px;
+    --step-4: 17px;
+    --step-5: 20px;
+    --step-6: 26px;
+    --step-7: 34px;
+    --step-8: 44px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0E1116;
+      --ground-2: #14181F;
+      --card: #171B22;
+      --ink: #E7EAEE;
+      --ink-2: #C7CCD3;
+      --ink-muted: #8A929B;
+      --border: #262A31;
+      --border-strong: #363B44;
+      --accent: #2FA083;
+      --accent-2: #56B8A0;
+      --accent-soft: #14332C;
+      --warn: #D89148;
+      --warn-soft: #3D2E17;
+      --pass: #56B27D;
+      --pass-soft: #143220;
+      --fail: #D57160;
+      --fail-soft: #3A1E17;
+      --highlight: #4A3E1A;
+      --fact: #2FA083;
+      --assumption: #D89148;
+      --hypothesis: #9F87DC;
+      --fact-soft: #14332C;
+      --assumption-soft: #3D2E17;
+      --hypothesis-soft: #241E38;
+      --shadow: 0 1px 0 rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #F5F6F8; --ground-2: #EDEFF3; --card: #FFFFFF;
+    --ink: #14171C; --ink-2: #3B4048; --ink-muted: #6B7078;
+    --border: #DCE0E6; --border-strong: #C4C9D2;
+    --accent: #1A6E58; --accent-2: #14513F; --accent-soft: #E4EEEA;
+    --warn: #C77A2E; --warn-soft: #F5EADB;
+    --pass: #2D8659; --pass-soft: #DEEEDF;
+    --fail: #B7503B; --fail-soft: #F1DEDA;
+    --highlight: #FFF3BF;
+    --fact: #1A6E58; --assumption: #C77A2E; --hypothesis: #6B54A3;
+    --fact-soft: #E4EEEA; --assumption-soft: #F5EADB; --hypothesis-soft: #ECE7F5;
+  }
+  :root[data-theme="dark"] {
+    --ground: #0E1116; --ground-2: #14181F; --card: #171B22;
+    --ink: #E7EAEE; --ink-2: #C7CCD3; --ink-muted: #8A929B;
+    --border: #262A31; --border-strong: #363B44;
+    --accent: #2FA083; --accent-2: #56B8A0; --accent-soft: #14332C;
+    --warn: #D89148; --warn-soft: #3D2E17;
+    --pass: #56B27D; --pass-soft: #143220;
+    --fail: #D57160; --fail-soft: #3A1E17;
+    --highlight: #4A3E1A;
+    --fact: #2FA083; --assumption: #D89148; --hypothesis: #9F87DC;
+    --fact-soft: #14332C; --assumption-soft: #3D2E17; --hypothesis-soft: #241E38;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--ground);
+    font-size: var(--step-3);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--accent-soft); color: var(--ink); }
+
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { color: var(--accent-2); }
+
+  button { font-family: inherit; font-size: inherit; cursor: pointer; }
+  input, textarea, select { font-family: inherit; color: inherit; background: transparent; }
+  input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, .chk:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  textarea { resize: vertical; }
+
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ─── TOPBAR ─────────────────────────────────────── */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in oklab, var(--card) 92%, transparent);
+    backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 24px; align-items: center;
+    padding: 12px 20px;
+  }
+  .brand {
+    display: flex; align-items: baseline; gap: 10px;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    letter-spacing: -0.01em;
+  }
+  .brand-mark {
+    display: inline-block; width: 22px; height: 22px;
+    border: 1.5px solid var(--ink); border-radius: 50%;
+    position: relative; align-self: center;
+  }
+  .brand-mark::after {
+    content: ""; position: absolute; inset: 4px 4px 4px 10px;
+    background: var(--ink); border-radius: 0 8px 8px 0;
+  }
+  .brand-title { font-weight: 400; }
+  .brand-sub {
+    font-family: var(--font-body);
+    font-size: var(--step-1);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--ink-muted);
+  }
+  .company-block {
+    display: flex; gap: 8px; align-items: center; justify-content: center;
+  }
+  .company-block select, .company-block input {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 7px 10px; border-radius: var(--radius);
+    font-size: var(--step-2);
+    min-width: 180px;
+  }
+  .company-block input { min-width: 240px; }
+  .actions { display: flex; gap: 6px; }
+  .btn {
+    padding: 7px 12px; border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--card); color: var(--ink);
+    font-size: var(--step-2);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background .12s, border-color .12s;
+  }
+  .btn:hover { background: var(--ground-2); border-color: var(--border-strong); }
+  .btn-primary {
+    background: var(--accent); color: white; border-color: var(--accent);
+  }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: white; }
+  .btn-danger { color: var(--fail); }
+  .btn-danger:hover { background: var(--fail-soft); border-color: var(--fail); }
+  .btn-ghost { border-color: transparent; background: transparent; }
+  .btn-ghost:hover { background: var(--ground-2); }
+
+  /* ─── ICP VERDICT STRIP ──────────────────────────── */
+  .verdict {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .verdict-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 999px;
+    font-size: var(--step-2); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .verdict-badge.pass { background: var(--pass-soft); color: var(--pass); }
+  .verdict-badge.borderline { background: var(--warn-soft); color: var(--warn); }
+  .verdict-badge.fail { background: var(--fail-soft); color: var(--fail); }
+  .verdict-badge.unknown { background: var(--ground-2); color: var(--ink-muted); }
+  .verdict-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+  .verdict-reason {
+    color: var(--ink-2); font-size: var(--step-2);
+  }
+  .verdict-progress {
+    display: flex; align-items: center; gap: 10px;
+    font-size: var(--step-2); color: var(--ink-muted);
+  }
+  .progress-ring {
+    --p: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: conic-gradient(var(--accent) calc(var(--p) * 1%), var(--border) 0);
+    display: grid; place-items: center;
+    position: relative;
+  }
+  .progress-ring::before {
+    content: ""; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--card);
+  }
+  .progress-ring span {
+    position: absolute; font-size: 10px; font-weight: 600; color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ─── LAYOUT ─────────────────────────────────────── */
+  .layout {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: 260px 1fr;
+    gap: 32px;
+    padding: 24px 20px 96px;
+  }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; padding-top: 16px; }
+    .nav-rail { position: static; }
+    .topbar-inner { grid-template-columns: 1fr; }
+    .verdict { grid-template-columns: 1fr; }
+  }
+
+  .nav-rail {
+    position: sticky; top: 130px; align-self: start;
+    max-height: calc(100vh - 150px); overflow-y: auto;
+    padding-right: 8px;
+  }
+  .nav-search {
+    width: 100%;
+    padding: 8px 10px; border-radius: var(--radius);
+    border: 1px solid var(--border); background: var(--card);
+    font-size: var(--step-2);
+    margin-bottom: 14px;
+  }
+  .nav-title {
+    font-size: var(--step-1); text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted); margin: 12px 6px 6px;
+  }
+  .nav-list { list-style: none; padding: 0; margin: 0 0 12px; }
+  .nav-list a {
+    display: grid; grid-template-columns: 24px 1fr auto;
+    align-items: center; gap: 10px;
+    padding: 6px 10px; border-radius: var(--radius);
+    text-decoration: none; color: var(--ink-2);
+    font-size: var(--step-2);
+  }
+  .nav-list a:hover { background: var(--ground-2); color: var(--ink); }
+  .nav-list a.active { background: var(--accent-soft); color: var(--accent); }
+  .nav-num {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink-muted); font-variant-numeric: tabular-nums;
+  }
+  .nav-list a.active .nav-num { color: var(--accent); }
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); border: 1.5px solid var(--border);
+  }
+  .nav-dot.partial { background: var(--warn); border-color: var(--warn); }
+  .nav-dot.done { background: var(--accent); border-color: var(--accent); }
+
+  /* ─── MAIN CONTENT ───────────────────────────────── */
+  .content { min-width: 0; }
+  .content h1 {
+    font-family: var(--font-display);
+    font-size: var(--step-7); font-weight: 400; letter-spacing: -0.02em;
+    margin: 0 0 8px; text-wrap: balance;
+  }
+  .lede {
+    font-size: var(--step-4); color: var(--ink-2); max-width: 62ch;
+    margin: 0 0 32px;
+  }
+  section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px; margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 140px;
+  }
+  section > header {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
+    align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .sec-num {
+    font-family: var(--font-mono); color: var(--ink-muted);
+    font-size: var(--step-2); font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+  }
+  section h2 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: var(--step-6); letter-spacing: -0.015em;
+    margin: 0; text-wrap: balance;
+  }
+  .sec-summary { color: var(--ink-2); max-width: 60ch; margin: 8px 0 0; grid-column: 2 / 3; }
+  .sec-progress {
+    font-size: var(--step-1); color: var(--ink-muted);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    display: inline-flex; align-items: center; gap: 8px;
+    align-self: center;
+  }
+  .sec-progress .bar {
+    width: 60px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .sec-progress .bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width .2s; }
+
+  /* Groups within a section */
+  .group {
+    border-top: 1px dashed var(--border);
+    padding: 20px 0 4px;
+  }
+  .group:first-of-type { border-top: none; padding-top: 0; }
+  .group h3 {
+    font-family: var(--font-body);
+    font-size: var(--step-3); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 4px; color: var(--ink);
+  }
+  .group-hint {
+    font-size: var(--step-2); color: var(--ink-muted);
+    margin: 0 0 12px; max-width: 60ch;
+  }
+  .group-body {
+    display: grid; grid-template-columns: 1fr 220px; gap: 24px;
+  }
+  @media (max-width: 720px) {
+    .group-body { grid-template-columns: 1fr; }
+  }
+
+  /* Checkboxes */
+  .checks { display: flex; flex-direction: column; gap: 2px; }
+  .chk {
+    display: grid; grid-template-columns: 20px 1fr auto; align-items: start; gap: 10px;
+    padding: 6px 8px; border-radius: var(--radius);
+    cursor: pointer;
+    transition: background .08s;
+  }
+  .chk:hover { background: var(--ground-2); }
+  .chk input {
+    appearance: none; -webkit-appearance: none;
+    width: 16px; height: 16px; margin-top: 2px;
+    border: 1.5px solid var(--border-strong); border-radius: 3px;
+    background: var(--card);
+    display: grid; place-items: center;
+    transition: background .1s, border-color .1s;
+  }
+  .chk input:checked {
+    background: var(--accent); border-color: var(--accent);
+  }
+  .chk input:checked::after {
+    content: ""; width: 4px; height: 8px;
+    border-right: 2px solid white; border-bottom: 2px solid white;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+  .chk-label { font-size: var(--step-3); color: var(--ink); }
+  .chk input:checked ~ .chk-label { color: var(--ink-muted); text-decoration: line-through; text-decoration-color: var(--border-strong); }
+  .priority-star {
+    color: var(--warn); font-size: 12px; margin-left: 4px;
+    position: relative; top: -1px;
+  }
+  .chk-meta { font-size: 11px; color: var(--ink-muted); font-family: var(--font-mono); }
+
+  /* Sidecards inside a group (gaps + tools) */
+  .side-card {
+    background: var(--ground-2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 14px;
+    font-size: var(--step-2);
+  }
+  .side-card + .side-card { margin-top: 12px; }
+  .side-card.warn { border-left-color: var(--warn); }
+  .side-card-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted); font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .side-card ul { margin: 0; padding-left: 16px; color: var(--ink-2); }
+  .side-card li { margin: 3px 0; }
+  .side-card .tool { display: inline-block; padding: 2px 6px; background: var(--card); border: 1px solid var(--border); border-radius: 3px; margin: 2px 3px 2px 0; font-size: 11px; font-family: var(--font-mono); color: var(--ink-2); }
+
+  /* Notes textarea */
+  .notes {
+    margin-top: 14px;
+    width: 100%; min-height: 60px;
+    padding: 10px 12px; border-radius: var(--radius);
+    border: 1px solid var(--border); background: var(--ground-2);
+    font-size: var(--step-2); line-height: 1.55;
+    color: var(--ink);
+  }
+  .notes::placeholder { color: var(--ink-muted); font-style: italic; }
+
+  /* Three-bucket tagger */
+  .bucket-block {
+    margin-top: 14px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--ground-2);
+    padding: 12px;
+  }
+  .bucket-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted); font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .bucket-entries { display: flex; flex-direction: column; gap: 8px; }
+  .bucket-entry {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 8px;
+    align-items: start;
+    padding: 8px; background: var(--card); border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+  .bucket-entry select {
+    padding: 3px 6px; border-radius: 3px; border: 1px solid var(--border);
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .bucket-entry select.fact { color: var(--fact); background: var(--fact-soft); border-color: var(--fact); }
+  .bucket-entry select.assumption { color: var(--assumption); background: var(--assumption-soft); border-color: var(--assumption); }
+  .bucket-entry select.hypothesis { color: var(--hypothesis); background: var(--hypothesis-soft); border-color: var(--hypothesis); }
+  .bucket-entry .fields { display: flex; flex-direction: column; gap: 4px; }
+  .bucket-entry input {
+    border: none; border-bottom: 1px dashed var(--border); padding: 4px 0;
+    font-size: var(--step-2); background: transparent;
+  }
+  .bucket-entry input.source { font-size: 11px; color: var(--ink-muted); font-family: var(--font-mono); }
+  .bucket-entry .rm {
+    background: transparent; border: none; color: var(--ink-muted); font-size: 16px;
+    cursor: pointer; padding: 0 4px;
+  }
+  .bucket-entry .rm:hover { color: var(--fail); }
+  .bucket-add {
+    margin-top: 8px; padding: 6px 10px; font-size: 11px;
+    background: var(--card); border: 1px dashed var(--border-strong);
+    border-radius: var(--radius); color: var(--ink-muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .bucket-add:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* FDD table */
+  .fdd-wrap { overflow-x: auto; margin: 12px 0 20px; }
+  table.fdd {
+    width: 100%; min-width: 640px; border-collapse: collapse;
+    font-size: var(--step-2);
+  }
+  table.fdd th, table.fdd td {
+    padding: 10px 12px; text-align: left; vertical-align: top;
+    border-bottom: 1px solid var(--border);
+  }
+  table.fdd th {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-muted); font-weight: 600;
+    border-bottom: 1px solid var(--border-strong);
+    background: var(--ground-2);
+  }
+  table.fdd td:first-child {
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    color: var(--ink); font-weight: 600; width: 60px;
+  }
+  table.fdd tr.starred td:first-child { color: var(--warn); }
+  table.fdd tr.starred td:first-child::after { content: " ★"; }
+  table.fdd .signal { color: var(--ink-muted); font-size: 12px; }
+
+  /* Meta form (ICP quick assessment) */
+  .meta-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px; margin-bottom: 16px;
+  }
+  .meta-field { display: flex; flex-direction: column; gap: 4px; }
+  .meta-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); font-weight: 600; }
+  .meta-field input, .meta-field select {
+    padding: 8px 10px; border-radius: var(--radius);
+    border: 1px solid var(--border); background: var(--card);
+    font-size: var(--step-3);
+  }
+
+  /* Decision-maker matrix */
+  .dm-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .dm-row {
+    display: grid; grid-template-columns: 160px 1fr;
+    gap: 16px; padding: 12px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--ground-2);
+  }
+  .dm-problem { font-weight: 600; }
+  .dm-titles { color: var(--ink-2); font-size: var(--step-2); }
+  .dm-input { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .dm-input input {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 6px 8px; font-size: var(--step-2); background: var(--card);
+  }
+
+  /* Sources drawer */
+  .drawer-toggle {
+    position: fixed; right: 20px; bottom: 20px; z-index: 60;
+    padding: 12px 16px; border-radius: 999px;
+    background: var(--ink); color: var(--ground);
+    border: none; font-size: var(--step-2); font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0,0,0,.2);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .drawer {
+    position: fixed; top: 0; right: 0; height: 100vh;
+    width: min(520px, 90vw);
+    background: var(--card); border-left: 1px solid var(--border);
+    z-index: 100;
+    transform: translateX(100%); transition: transform .25s ease;
+    overflow-y: auto;
+    box-shadow: -8px 0 40px rgba(0,0,0,.15);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-header {
+    position: sticky; top: 0; background: var(--card);
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .drawer-header h2 {
+    font-family: var(--font-display); font-weight: 400; margin: 0;
+    font-size: var(--step-5);
+  }
+  .drawer-body { padding: 20px; font-size: var(--step-2); }
+  .drawer-body h3 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-muted); font-weight: 600;
+    margin: 20px 0 6px; padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .drawer-body h3:first-child { margin-top: 0; }
+  .drawer-body ul { padding-left: 18px; margin: 6px 0 12px; }
+  .drawer-body li { margin: 4px 0; color: var(--ink-2); }
+  .drawer-body a { word-break: break-all; }
+  .drawer-scrim {
+    position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 99;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .drawer-scrim.open { opacity: 1; pointer-events: auto; }
+  .history-empty { color: var(--ink-muted); font-style: italic; }
+  .history-entry {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+    cursor: pointer; background: none; border-left: none; border-right: none; border-top: none;
+    width: 100%; text-align: left; font: inherit; color: inherit;
+  }
+  .history-entry:hover { background: var(--ground); }
+  .history-entry.current { cursor: default; }
+  .history-entry-name { font-weight: 600; }
+  .history-entry-meta { font-size: 11px; color: var(--ink-muted); white-space: nowrap; }
+
+  /* Hidden export area */
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--ground);
+    padding: 10px 18px; border-radius: var(--radius);
+    font-size: var(--step-2); z-index: 200;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .toast.show { opacity: 1; }
+
+  /* Hide when filtered */
+  .hidden { display: none !important; }
+  mark { background: var(--highlight); padding: 0 2px; border-radius: 2px; color: var(--ink); }
+
+  /* Legend / three-bucket key */
+  .bucket-key {
+    display: inline-flex; gap: 10px; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-muted);
+  }
+  .bucket-key span::before {
+    content: "●"; margin-right: 4px;
+  }
+  .bucket-key .k-fact::before { color: var(--fact); }
+  .bucket-key .k-assumption::before { color: var(--assumption); }
+  .bucket-key .k-hypothesis::before { color: var(--hypothesis); }
+
+  /* Print */
+  @media print {
+    .topbar, .nav-rail, .drawer-toggle, .actions, .verdict-progress { display: none; }
+    .layout { grid-template-columns: 1fr; padding: 0; max-width: none; }
+    section { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+    body { background: white; color: black; }
+  }
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <button class="btn btn-ghost" id="historyBtn" title="Browse every company on record, even partial ones">Show history</button>
+      <span class="brand-mark"></span>
+      <span class="brand-title">Research Console</span>
+      <span class="brand-sub">Home Services · US Franchisors</span>
+    </div>
+    <div class="company-block">
+      <select id="companyPicker" title="Switch company">
+        <option value="__new">＋ New company…</option>
+      </select>
+      <input id="companyName" type="text" placeholder="Company name" autocomplete="off">
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" id="themeBtn" title="Toggle theme">◐</button>
+      <button class="btn" id="exportBtn" title="Export the current company as Markdown sales brief">Export brief</button>
+      <button class="btn" id="saveBtn" title="Save now (autosaves as you work)">Save</button>
+      <button class="btn btn-danger" id="resetBtn" title="Reset the current company's data — this cannot be undone">Reset company</button>
+    </div>
+  </div>
+  <div class="verdict">
+    <div id="verdictBadge" class="verdict-badge unknown">
+      <span class="dot"></span>
+      <span id="verdictLabel">ICP unknown</span>
+    </div>
+    <div class="verdict-reason" id="verdictReason">Fill the setup section to score ICP fit.</div>
+    <div class="verdict-progress">
+      <span>Research completeness</span>
+      <div class="progress-ring" id="overallRing"><span id="overallPct">0%</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="nav-rail" id="navRail">
+    <input id="searchBox" class="nav-search" type="search" placeholder="Search all checks (⌘/Ctrl+K)">
+    <div class="nav-title">Sections</div>
+    <ol class="nav-list" id="navList"></ol>
+    <div class="nav-title" style="margin-top:16px">Legend</div>
+    <div style="padding: 4px 6px; display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: var(--ink-muted);">
+      <div class="bucket-key">
+        <span class="k-fact">Fact</span>
+        <span class="k-assumption">Assumption</span>
+        <span class="k-hypothesis">Hypothesis</span>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <span class="nav-dot done"></span> complete
+        <span class="nav-dot partial"></span> partial
+        <span class="nav-dot"></span> empty
+      </div>
+      <div><span style="color: var(--warn);">★</span> priority item</div>
+    </div>
+  </nav>
+
+  <main class="content">
+    <h1>Account intelligence for a single company.</h1>
+    <p class="lede">
+      A structured research surface built for the Weam sales-and-marketing workflow: score ICP fit, work every department, hunt the gaps that matter, sort every finding into Fact / Assumption / Hypothesis, and export a sales-ready brief. Autosaves per company in this browser — switch accounts from the top bar.
+    </p>
+    <div id="root"></div>
+  </main>
+</div>
+
+<button class="drawer-toggle" id="drawerBtn">Sources map ↗</button>
+<div class="drawer-scrim" id="drawerScrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-header">
+    <h2>Sources map</h2>
+    <button class="btn btn-ghost" id="drawerClose">Close ✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="drawer-scrim" id="historyScrim"></div>
+<aside class="drawer" id="historyDrawer" aria-hidden="true">
+  <div class="drawer-header">
+    <h2>Company history</h2>
+    <button class="btn btn-ghost" id="historyClose">Close ✕</button>
+  </div>
+  <div class="drawer-body" id="historyBody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   SECTION DEFINITIONS — the substance of the console.
+   Every entry lists the check to run, the gap to hunt, and the
+   systems Weam most commonly finds already in use for that job.
+   ───────────────────────────────────────────────────────────── */
+
+const SECTIONS = [
+  {
+    id: 'setup', number: '01', title: 'ICP Setup',
+    summary: 'Score the account against Weam ICP first — if it fails the band, the rest is context, not qualification.',
+    meta: true,
+    groups: []
+  },
+  {
+    id: 'six-pillar', number: '02', title: 'Six-Pillar Snapshot',
+    summary: 'The account-ownership foundation from ROLE.md — every pillar answered or explicitly flagged as a gap.',
+    groups: [
+      {
+        id: 'what-they-do', title: 'What they do',
+        hint: 'Core products/services, business model, positioning — in one paragraph you could recite from memory.',
+        checks: [
+          { id: 'services', label: 'Core services / product lines mapped', priority: true },
+          { id: 'model', label: 'Business model (franchise / corporate / hybrid) confirmed', priority: true },
+          { id: 'position', label: 'Positioning line pulled from homepage / About' },
+          { id: 'segment', label: 'Target customer segment (B2C / B2B / insurance-driven / commercial)' },
+          { id: 'category', label: 'Home Services category from Vertical.md assigned' },
+        ],
+        gaps: [
+          'Do they say the same thing about themselves in press as on the site?',
+          'Any "AI cost-cutting" language on the site that a Weam pitch could echo?',
+        ],
+        tools: []
+      },
+      {
+        id: 'leadership', title: 'Leadership',
+        hint: 'Names, tenures, backgrounds, and current public statements of every relevant decision-maker.',
+        checks: [
+          { id: 'ceo', label: 'CEO name + tenure + prior companies', priority: true },
+          { id: 'coo', label: 'COO / Head of Operations identified' },
+          { id: 'cmo', label: 'CMO / Head of Marketing identified' },
+          { id: 'cto', label: 'CTO / CIO / Head of Digital identified' },
+          { id: 'cfo', label: 'CFO / Head of Finance identified' },
+          { id: 'chief-dev', label: 'Chief Development Officer / VP Franchise Development identified (franchise brands)' },
+          { id: 'success', label: 'Head of Franchisee Success / Field Ops (if franchise)' },
+          { id: 'board', label: 'Board members / PE partners listed (if PE-backed)' },
+          { id: 'recent-hire', label: 'Any C-suite hire in last 18 months noted (investment signal)', priority: true },
+        ],
+        gaps: [
+          'Which of these leaders posts publicly on LinkedIn? Recency of last post.',
+          'Any leadership podcast or conference talk in last 12 months?',
+          'Tenure < 2 years for anyone — new priorities inbound.',
+        ],
+        tools: []
+      },
+      {
+        id: 'money', title: 'How they make money',
+        hint: 'Unit economics, revenue streams, and what "growth" actually means for their P&L.',
+        checks: [
+          { id: 'revenue-streams', label: 'Primary revenue streams (installs / recurring service / royalty / product)' },
+          { id: 'royalty', label: 'Royalty % (FDD Item 6)' },
+          { id: 'marketing-fund', label: 'National marketing fund % (FDD Item 6)' },
+          { id: 'tech-fee', label: 'Technology / software fee (FDD Item 6) — bellwether for tech spend appetite' },
+          { id: 'avg-unit', label: 'Average unit revenue / FPR (FDD Item 19)', priority: true },
+          { id: 'systemwide', label: 'Systemwide sales figure (from Franchise Times / press)' },
+        ],
+        gaps: [
+          'Ratio of top-decile to bottom-decile units — franchisee performance spread often reveals the operational gap AI addresses.',
+          'Is unit-level margin trending up or down (compare 2-yr Item 19)?',
+        ],
+        tools: []
+      },
+      {
+        id: 'challenges', title: 'Challenges',
+        hint: 'Operational, competitive, tech, and market pressures — often loudest in franchisee sentiment and reviews.',
+        checks: [
+          { id: 'reviews-pattern', label: 'Top 3 recurring 1-star complaint patterns from Google + Yelp', priority: true },
+          { id: 'franchisee-sentiment', label: 'Franchisee sentiment sampled (FBR score / BlueMauMau / Reddit)' },
+          { id: 'litigation', label: 'Litigation summary (FDD Item 3) — franchisee suits are a pain signal' },
+          { id: 'closures', label: 'Unit closures last 3 years (FDD Item 20 Table 3)', priority: true },
+          { id: 'comp-pressure', label: 'Named competitors + how they compete' },
+        ],
+        gaps: [
+          'Is closure rate rising? — churn signal often precedes system-wide operational overhaul.',
+          'Do complaints cluster around scheduling, callback, or estimate follow-up? Those are Weam bullseyes.',
+        ],
+        tools: []
+      },
+      {
+        id: 'growth', title: 'Where they\'re growing',
+        hint: 'Not just "we\'re growing" — which states, which formats, which cohort of franchisees.',
+        checks: [
+          { id: 'projected-openings', label: 'Projected new units next year (FDD Item 20 Table 5)', priority: true },
+          { id: 'geo-priority', label: 'Priority markets named in press releases / franchise development pages' },
+          { id: 'new-formats', label: 'New service lines / formats announced last 12 months' },
+          { id: 'ma-activity', label: 'Recent M&A activity (as acquirer or target)' },
+          { id: 'funding', label: 'Recent funding / recap / PE change (last 24 months)' },
+        ],
+        gaps: [
+          'Growth by new-unit openings vs same-store revenue — different sales conversation for each.',
+          'PE-backed with 2-3 yr hold clock ticking = active cost-optimization window.',
+        ],
+        tools: []
+      },
+      {
+        id: 'customers', title: 'Who their customers are',
+        hint: 'End-customer profile — the person paying for the service. Different from the franchisee.',
+        checks: [
+          { id: 'b2c-b2b', label: 'B2C / B2B / insurance-driven mix' },
+          { id: 'demo', label: 'End-customer demographic (age / income / homeownership tenure)' },
+          { id: 'trigger', label: 'Buying trigger (emergency / planned / referral / online-lead)' },
+          { id: 'ltv', label: 'Repeat vs one-time purchase pattern' },
+          { id: 'channel', label: 'Primary customer acquisition channel (SEO / paid / referral / call center)' },
+        ],
+        gaps: [
+          'Insurance-driven verticals (restoration) have completely different sales conversation vs consumer-paid.',
+          'Emergency (plumbing/HVAC) = speed-to-lead is the KPI. Planned (bath remodel) = quote quality is the KPI.',
+        ],
+        tools: []
+      },
+    ]
+  },
+  {
+    id: 'leadership-map', number: '03', title: 'Leadership Deep Map',
+    summary: 'Beyond names — tenures, prior employers, public statements, and where each leader spends attention.',
+    groups: [
+      {
+        id: 'exec-profiles', title: 'Executive profiles',
+        hint: 'For each named leader, pull the below. LinkedIn Sales Navigator makes this a 3-minute task per person.',
+        checks: [
+          { id: 'linkedin-url', label: 'LinkedIn URL for every C-suite + relevant VP' },
+          { id: 'tenure', label: 'Tenure in current role (year of start)' },
+          { id: 'prior-3', label: 'Prior 3 employers — reveals playbook they\'re running' },
+          { id: 'public-posts', label: 'Last 3 public LinkedIn posts / articles (any theme?)' },
+          { id: 'podcast-appearance', label: 'Any podcast / webinar / panel appearance in last 12 mo — quote-mine for priorities', priority: true },
+          { id: 'quotes', label: 'Quotable priorities captured (with citation)', priority: true },
+        ],
+        gaps: [
+          'CEO/CMO/CTO who explicitly names "AI" or "automation" in public statements — highest-yield outreach angle.',
+          'Ex-Neighborly / ex-Authority Brands / ex-ServiceTitan alumni show up everywhere — check for these on new hires.',
+        ],
+        tools: ['LinkedIn Sales Navigator', 'Crunchbase people search', 'Podscan / Listen Notes (podcast mentions)']
+      },
+      {
+        id: 'ownership-tree', title: 'Ownership tree',
+        hint: 'Who ultimately owns the company — and who holds the strategic clock (PE hold periods matter).',
+        checks: [
+          { id: 'parent', label: 'Immediate parent entity (FDD Item 1)' },
+          { id: 'ultimate', label: 'Ultimate parent / PE sponsor' },
+          { id: 'acquisition-date', label: 'Date of latest ownership change' },
+          { id: 'hold-clock', label: 'Estimated PE hold-period remaining (3-5 yrs from acquisition typical)' },
+          { id: 'sponsor-thesis', label: 'PE sponsor\'s stated thesis (from their portfolio page)' },
+        ],
+        gaps: [
+          'PE thesis of "operational transformation" or "digital enablement" = pre-qualified for Weam pitch.',
+          'Newer (< 24 mo) ownership = still installing platform; older (> 36 mo) = value-creation phase — different conversations.',
+        ],
+        tools: ['PitchBook', 'PE firm portfolio pages', 'PrivCo']
+      },
+    ]
+  },
+  {
+    id: 'operations', number: '04', title: 'Operations',
+    summary: 'Field service dispatch, scheduling, quality, and multi-location reporting. Where the most Weam wins hide.',
+    groups: [
+      {
+        id: 'fsm-dispatch', title: 'Field service & dispatch',
+        hint: 'The bread and butter for home services. Identify the FSM system first — it dictates everything else.',
+        checks: [
+          { id: 'fsm-platform', label: 'FSM platform identified (from job postings / FDD Item 11 / press)', priority: true },
+          { id: 'dispatch-model', label: 'Dispatch model: central call center vs franchisee-local' },
+          { id: 'appointment-flow', label: 'Appointment intake flow mapped (call → book → dispatch → complete)' },
+          { id: 'route-opt', label: 'Route optimization in place? (or manual)' },
+          { id: 'tech-mobile-app', label: 'Technician-facing mobile app?' },
+          { id: 'after-hours', label: 'After-hours / weekend coverage model' },
+        ],
+        gaps: [
+          'Are dispatchers dragging jobs across a whiteboard/UI (manual reshuffling = automation win)?',
+          'What % of dispatched jobs get rescheduled? (rescheduling is a scheduling-AI signal)',
+          'Is speed-to-first-appointment tracked corporate-wide or just per-franchisee?',
+        ],
+        tools: ['ServiceTitan', 'Housecall Pro', 'Jobber', 'FieldEdge', 'Successware', 'WorkWave', 'RazorSync', 'mHelpDesk', 'ServiceMonster']
+      },
+      {
+        id: 'multi-loc-reporting', title: 'Multi-location reporting & rollups',
+        hint: 'The single biggest Weam ROI story: turning franchisee-submitted Excel/PDF weekly reports into a live rollup.',
+        checks: [
+          { id: 'rollup-cadence', label: 'Corporate reporting cadence (daily / weekly / monthly)', priority: true },
+          { id: 'rollup-source', label: 'Source: POS-integrated pull vs franchisee-submitted' },
+          { id: 'rollup-format', label: 'Submission format(s) — Excel, PDF, portal entry?' },
+          { id: 'kpi-set', label: 'KPIs tracked (revenue / jobs / avg ticket / conversion / NPS)' },
+          { id: 'dashboards', label: 'Executive dashboard tool (if any)' },
+        ],
+        gaps: [
+          'Weekly emailed Excel from every franchisee → corporate = classic Weam automation opportunity.',
+          'If dashboards lag month-end by > 2 weeks, corporate is flying blind on today\'s performance.',
+        ],
+        tools: ['FranConnect', 'Naranga', 'Zenput', 'Franchise Metrics', 'Sisense', 'Tableau', 'Power BI', 'Domo']
+      },
+      {
+        id: 'quality-compliance', title: 'Quality, compliance & brand-audit',
+        hint: 'Where the same manual audit runs 200 times a year — a computer-vision or checklist-AI natural.',
+        checks: [
+          { id: 'audit-cadence', label: 'Brand-standards audit cadence (self-audit / mystery shop / field visit)' },
+          { id: 'safety-comp', label: 'Safety / EPA / license compliance tracking' },
+          { id: 'photo-req', label: 'Photo-before/after or job-verification requirement' },
+          { id: 'audit-tool', label: 'Auditing tool in use (Zenput / GoAudits / Repsly / paper)' },
+        ],
+        gaps: [
+          'Are field visits done by district managers with clipboards + Excel? — computer-vision auditing is a fit.',
+          'Photo-of-completed-work uploads without a review workflow = wasted signal.',
+        ],
+        tools: ['Zenput', 'GoAudits', 'Repsly', 'AuditBoard', 'iAuditor / SafetyCulture']
+      },
+    ]
+  },
+  {
+    id: 'marketing', number: '05', title: 'Marketing',
+    summary: 'Local marketing across N locations is a repetitive-work multiplier. The dominant Weam pitch surface.',
+    groups: [
+      {
+        id: 'local-seo', title: 'Local SEO & Google Business Profile',
+        hint: 'Every location = one GBP + one local site. Doing it well at 100+ locations is a full-time coordination problem.',
+        checks: [
+          { id: 'gbp-mgmt', label: 'GBP management: corporate-controlled, franchisee-controlled, or hybrid?', priority: true },
+          { id: 'local-pages', label: 'Local landing pages — templated or unique per market?' },
+          { id: 'seo-agency', label: 'SEO handled in-house or agency? (search "SEO agency" + brand name)' },
+          { id: 'nap-consistency', label: 'NAP consistency signals (Yext / BrightLocal directory audit)' },
+          { id: 'ranking-signals', label: 'Ranking for target service + city queries in 3 sample markets' },
+        ],
+        gaps: [
+          'Weekly GBP posts across N locations is the single most common "we do it manually" admission.',
+          'If franchisees own their GBP, corporate can\'t see review velocity — data blind spot.',
+          'Multiple listings / duplicates = local-SEO health issue.',
+        ],
+        tools: ['Yext', 'BrightLocal', 'Whitespark', 'SEMrush', 'Ahrefs', 'Localworks', 'Rio SEO']
+      },
+      {
+        id: 'reputation', title: 'Reputation & reviews',
+        hint: 'Review response speed, sentiment tracking, and franchisee accountability all live here.',
+        checks: [
+          { id: 'review-platform', label: 'Reputation platform in use (Podium / Birdeye / Chatmeter / SOCi / etc.)', priority: true },
+          { id: 'response-cadence', label: 'Corporate response-to-review policy / SLA' },
+          { id: 'aggregate-score', label: 'Aggregate rating across all locations (Google + Yelp)' },
+          { id: 'response-rate', label: '% of 1-star reviews with a response, sampled' },
+          { id: 'sentiment-theme', label: 'Sentiment themes surfaced (per top-complaint list from Six-Pillar / Challenges)' },
+        ],
+        gaps: [
+          'Franchisee-owned review response = wildly inconsistent tone and speed.',
+          'Aggregate rating < 4.2 at scale is a top-of-the-house problem.',
+          'No public response to 1-star reviews > 30 days old = disengagement.',
+        ],
+        tools: ['Podium', 'Birdeye', 'Chatmeter', 'SOCi', 'ReviewTrackers', 'Reputation.com', 'Grade.us', 'NiceJob']
+      },
+      {
+        id: 'paid-social', title: 'Paid, social & franchisee co-op',
+        hint: 'National fund + local co-op = coordination pain that only grows with unit count.',
+        checks: [
+          { id: 'nat-fund', label: 'National ad fund structure (from FDD Item 6)' },
+          { id: 'coop-fund', label: 'Local co-op fund structure & approval workflow' },
+          { id: 'ad-approval', label: 'Franchisee ad-creative approval process' },
+          { id: 'social-approval', label: 'Franchisee-generated social media approval workflow' },
+          { id: 'agencies', label: 'Named agencies of record (from LinkedIn / trade press)' },
+          { id: 'paid-channels', label: 'Primary paid channels (Google / Meta / TikTok / LSA)' },
+        ],
+        gaps: [
+          'Ad creative submitted via email / Dropbox and approved manually is a Weam bullseye.',
+          'National creative repurposed for local without localization = missed conversion.',
+          'Local Services Ads (LSA) presence in verticals like plumbing/HVAC — check if maxed out.',
+        ],
+        tools: ['SOCi', 'Hootsuite for franchise', 'Sprinklr', 'Kenshoo', 'Marin', 'Google LSA', 'Meta Business Manager']
+      },
+      {
+        id: 'email-sms', title: 'Email, SMS & lifecycle',
+        hint: 'Recurring-service verticals (cleaning, HVAC maintenance) live and die on lifecycle marketing.',
+        checks: [
+          { id: 'esp', label: 'Email service provider identified' },
+          { id: 'sms-provider', label: 'SMS platform identified' },
+          { id: 'lifecycle', label: 'Lifecycle journeys mapped (welcome / rebook / referral / winback)' },
+          { id: 'birthday-anniv', label: 'Anniversary / maintenance-reminder automation?' },
+          { id: 'franchisee-templated', label: 'Are templates franchisee-editable or locked?' },
+        ],
+        gaps: [
+          'One-off "send this promo" campaigns done via mail-merge by an assistant = automation win.',
+          'No re-engagement of lapsed maintenance customers = lost recurring revenue.',
+        ],
+        tools: ['HubSpot', 'Klaviyo', 'Mailchimp', 'Constant Contact', 'ActiveCampaign', 'Emma', 'Twilio', 'Simpletexting']
+      },
+    ]
+  },
+  {
+    id: 'sales', number: '06', title: 'Sales & Lead Ops',
+    summary: 'Lead intake → routing → follow-up. Every dropped ball here is a franchisee losing money.',
+    groups: [
+      {
+        id: 'lead-intake', title: 'Lead intake & routing',
+        hint: 'How does a stranger become a franchisee\'s appointment? Every hand-off is an automation candidate.',
+        checks: [
+          { id: 'intake-channels', label: 'Intake channels (web form / call / chat / LSA)' },
+          { id: 'call-tracking', label: 'Call-tracking platform (CallRail / CallTrackingMetrics / Invoca)', priority: true },
+          { id: 'lead-routing', label: 'Lead routing logic (zip code / round robin / rating-based)' },
+          { id: 'routing-tool', label: 'Routing tool (manual dispatcher / LeadPerfection / native FSM)' },
+          { id: 'speed-to-lead', label: 'Speed-to-lead SLA tracked?' },
+          { id: 'missed-call', label: 'Missed-call / after-hours coverage model' },
+        ],
+        gaps: [
+          '> 5-min speed-to-lead in emergency verticals = franchisee churn signal.',
+          'Manual lead-routing dispatcher spending their day copy-pasting = high-value automation.',
+          'Missed-call SMS reply automation absent = obvious first Weam workflow.',
+        ],
+        tools: ['CallRail', 'CallTrackingMetrics', 'Invoca', 'LeadPerfection', 'Convoso', 'AloAI', 'CallSource']
+      },
+      {
+        id: 'quote-followup', title: 'In-home quotes & follow-up',
+        hint: 'For install-heavy verticals (blinds, bath, closets, flooring), the quote → close motion is the sales business.',
+        checks: [
+          { id: 'quote-tool', label: 'In-home quote tool (paper / MarketSharp / iPad app / native FSM)' },
+          { id: 'quote-follow', label: 'Automated quote follow-up cadence' },
+          { id: 'close-rate', label: 'Close rate tracked corporate-wide or per-franchisee?' },
+          { id: 'reasons-lost', label: 'Reasons-lost captured?' },
+          { id: 'financing-offer', label: 'Consumer financing offered (GreenSky / Synchrony / Enhancify)' },
+        ],
+        gaps: [
+          '"We email the quote and hope" — extremely common; 3-touch AI follow-up sequence is a fast win.',
+          'No reasons-lost capture = no learning loop.',
+        ],
+        tools: ['MarketSharp', 'improveit 360', 'i360', 'JobNimbus', 'AccuLynx', 'GreenSky', 'Enhancify', 'Synchrony', 'Hearth']
+      },
+      {
+        id: 'crm', title: 'Sales CRM',
+        hint: 'What CRM lives at corporate vs at each franchisee — usually different.',
+        checks: [
+          { id: 'corp-crm', label: 'Corporate CRM (Salesforce / HubSpot / etc.)' },
+          { id: 'franchisee-crm', label: 'Franchisee-level CRM (often the FSM has one baked in)' },
+          { id: 'crm-integration', label: 'Do the two systems talk?' },
+          { id: 'sales-reporting', label: 'How is pipeline reported to corporate?' },
+        ],
+        gaps: [
+          'Two disconnected CRMs = every rollup involves an intern reconciling exports. Weam bullseye.',
+        ],
+        tools: ['Salesforce', 'HubSpot', 'Zoho', 'Pipedrive', 'GoHighLevel', 'Nutshell']
+      },
+    ]
+  },
+  {
+    id: 'finance', number: '07', title: 'Finance & Royalty',
+    summary: 'Royalty audit, franchisee P&L rollup, national ad fund accounting — repetitive by nature, high AI leverage.',
+    groups: [
+      {
+        id: 'royalty', title: 'Royalty tracking & audit',
+        hint: 'How does the franchisor know what to bill? The delta between "POS-integrated pull" and "franchisee self-report" is the whole story.',
+        checks: [
+          { id: 'royalty-method', label: 'Royalty calculation method (POS-integrated / self-reported / bank-feed)', priority: true },
+          { id: 'audit-cadence', label: 'Royalty audit cadence (continuous / annual / ad-hoc)' },
+          { id: 'audit-findings', label: 'Any public litigation about underreporting (FDD Item 3)?' },
+          { id: 'reporting-tool', label: 'Royalty reporting tool (FranConnect / Profit Keeper / spreadsheets)' },
+        ],
+        gaps: [
+          'Self-reported royalty + no audit tool = leakage. Continuous-AI audit is a strong pitch.',
+          'Item 3 litigation mentioning "underreported gross sales" = the pain has already surfaced.',
+        ],
+        tools: ['FranConnect Financial', 'Profit Keeper', 'QuickBooks', 'Sage Intacct', 'NetSuite']
+      },
+      {
+        id: 'franchisee-financials', title: 'Franchisee financial rollups',
+        hint: 'The monthly rain dance of collecting P&Ls in whatever format each franchisee submits.',
+        checks: [
+          { id: 'pl-collection', label: 'How franchisee P&Ls are collected (portal / email / not at all)' },
+          { id: 'chart-of-accounts', label: 'Standardized chart of accounts?' },
+          { id: 'benchmarking', label: 'Benchmark reports back to franchisees (top-decile vs their own performance)?' },
+          { id: 'coach-access', label: 'Business coaches / franchise consultants access financials?' },
+        ],
+        gaps: [
+          'Every franchisee on different accounting software = normalizing them is a repetitive manual task Weam eats.',
+          'No benchmarking = franchisees fly blind on what "good" looks like.',
+        ],
+        tools: ['QuickBooks Online', 'Xero', 'Sage', 'Profit Keeper', 'FranConnect', 'Compyle']
+      },
+      {
+        id: 'ap-ar', title: 'AP, AR, and national ad fund accounting',
+        hint: 'National ad fund reconciliation is legally required and universally hated. Automation candidate.',
+        checks: [
+          { id: 'ap-tool', label: 'AP automation tool in use' },
+          { id: 'ar-collections', label: 'AR / collections process' },
+          { id: 'ad-fund-recon', label: 'National ad fund reconciliation cadence' },
+          { id: 'audit-firm', label: 'External auditor (from FDD Item 21)' },
+        ],
+        gaps: [
+          'National ad fund report is often a quarterly 30-hour Excel exercise for one person.',
+        ],
+        tools: ['Bill.com', 'Ramp', 'Brex', 'Tipalti', 'Stampli', 'AvidXchange']
+      },
+    ]
+  },
+  {
+    id: 'hr', number: '08', title: 'HR & Talent',
+    summary: 'Recruiting, onboarding, training, retention — trades verticals are perpetually short-staffed.',
+    groups: [
+      {
+        id: 'recruiting', title: 'Technician recruiting',
+        hint: 'For plumbing / HVAC / electric / restoration, the constant hiring is the operational reality.',
+        checks: [
+          { id: 'recruit-model', label: 'Recruiting: corporate-led / franchisee-led / hybrid' },
+          { id: 'ats', label: 'ATS in use (from careers page tech signals)' },
+          { id: 'job-post-volume', label: 'Live job postings count across all locations (Indeed / LinkedIn)', priority: true },
+          { id: 'role-mix', label: 'Role mix — techs vs office vs marketing' },
+          { id: 'referral-program', label: 'Referral bonus / hiring incentive program advertised' },
+        ],
+        gaps: [
+          '"Applicant screening" or "phone screen" mentioned as pain in job posts = voice-agent opportunity.',
+          '15+ dispatcher openings across the system = dispatcher churn (or growth) — dig into which.',
+          'Team Engine / Trade Hounds usage in trades verticals is a signal of modernization.',
+        ],
+        tools: ['Team Engine', 'Trade Hounds', 'Workable', 'Greenhouse', 'iCIMS', 'Paylocity', 'Paycor', 'ADP Workforce Now']
+      },
+      {
+        id: 'training-lms', title: 'Training & LMS',
+        hint: 'FDD Item 11 usually names the LMS. Onboarding is where "manual" and "repetitive" collide most.',
+        checks: [
+          { id: 'lms-platform', label: 'LMS platform (from FDD Item 11)' },
+          { id: 'certifications', label: 'Certifications tracked (EPA 608 / plumbing / IICRC)' },
+          { id: 'onboard-length', label: 'New-franchisee onboarding length' },
+          { id: 'tech-onboard', label: 'New-technician onboarding length' },
+        ],
+        gaps: [
+          'Onboarding docs living in Google Drive / SharePoint with no search = knowledge-assistant pitch.',
+          'Same 10 franchisee questions asked over and over to corporate = Weam franchisee-support AI.',
+        ],
+        tools: ['Docebo', 'TalentLMS', 'FranConnect Academy', 'Bridge', 'Lessonly', 'SkyPrep', 'Wisetail']
+      },
+      {
+        id: 'retention', title: 'Retention signals',
+        hint: 'Turnover in field roles is universal but rarely disclosed. Read between the lines of reviews and hiring cadence.',
+        checks: [
+          { id: 'glassdoor-rating', label: 'Glassdoor rating + trend' },
+          { id: 'glassdoor-themes', label: 'Recurring Glassdoor complaint themes' },
+          { id: 'perpetual-openings', label: 'Roles that appear on the careers page every month = churn signal' },
+        ],
+        gaps: [
+          'Franchisee sentiment often mirrors employee sentiment — cross-check the two.',
+        ],
+        tools: ['Glassdoor', 'Indeed reviews', 'Comparably']
+      },
+    ]
+  },
+  {
+    id: 'tech', number: '09', title: 'Technology Stack',
+    summary: 'Sniff the stack before pitching. What\'s mandated, what\'s optional, and where the data silos sit.',
+    groups: [
+      {
+        id: 'stack-primary', title: 'Primary systems',
+        hint: 'The core stack — usually confirmable from FDD Item 11, job postings, and BuiltWith.',
+        checks: [
+          { id: 'crm-sys', label: 'CRM system', priority: true },
+          { id: 'fsm-sys', label: 'FSM system', priority: true },
+          { id: 'franchise-mgmt-sys', label: 'Franchise-management system (FranConnect / Naranga / Zenput)' },
+          { id: 'pos-sys', label: 'POS (only if retail-adjacent — Toast / Square / Clover)' },
+          { id: 'financial-sys', label: 'Financial system (QuickBooks / Sage Intacct / NetSuite)' },
+          { id: 'hris-sys', label: 'HRIS / payroll' },
+          { id: 'data-warehouse', label: 'Data warehouse mentioned in engineering job posts' },
+          { id: 'bi-tool', label: 'BI / dashboard tool' },
+        ],
+        gaps: [
+          'FDD Item 11 lists MANDATED software — start here.',
+          'Job postings for "Snowflake / dbt / Fivetran" = active data warehouse investment (buyer receptive).',
+          'Recent CTO/CIO hire (< 12 mo) = tech thesis being installed right now.',
+        ],
+        tools: []
+      },
+      {
+        id: 'stack-sniff', title: 'Website tech-stack sniff',
+        hint: 'A 30-second BuiltWith or Wappalyzer scan reveals more than a 30-minute call sometimes.',
+        checks: [
+          { id: 'analytics', label: 'Analytics — GA4 / Adobe / Segment / other' },
+          { id: 'chat-widget', label: 'Chat widget (Intercom / Drift / Podium / native)' },
+          { id: 'cms', label: 'CMS (WordPress / Contentful / custom)' },
+          { id: 'cdp', label: 'CDP or tag manager mentions' },
+          { id: 'schedule-widget', label: 'Scheduling widget provider' },
+        ],
+        gaps: [
+          'Intercom + no ticket routing = manual customer support triage.',
+          'Podium already installed = review AI could layer in easily.',
+        ],
+        tools: ['BuiltWith', 'Wappalyzer', 'StackShare']
+      },
+      {
+        id: 'silos', title: 'Data silos & integration gaps',
+        hint: 'Weam\'s wedge lives in the space between two systems that don\'t talk.',
+        checks: [
+          { id: 'silo-map', label: 'Data silos identified between: FSM ↔ CRM ↔ Finance ↔ HRIS' },
+          { id: 'integration-tools', label: 'Integration middleware (Workato / Zapier / Mulesoft / iPaaS)' },
+          { id: 'excel-role', label: 'Roles listed as "data / reporting analyst" doing manual joins' },
+        ],
+        gaps: [
+          '"Master Excel" analyst in job posts = the human iPaaS. Weam replaces this workflow.',
+        ],
+        tools: ['Workato', 'Zapier', 'Make', 'Mulesoft', 'Boomi', 'Tray.io']
+      },
+    ]
+  },
+  {
+    id: 'support', number: '10', title: 'Customer Support',
+    summary: 'How the customer gets help after the sale — call center, franchisee, or nothing.',
+    groups: [
+      {
+        id: 'support-channels', title: 'Support channels',
+        hint: 'Emergency verticals (plumbing/HVAC/restoration) live or die on 24/7 coverage.',
+        checks: [
+          { id: 'phone-cc', label: 'Phone support — corporate call center or per-franchisee' },
+          { id: 'chat-support', label: 'Chat / SMS support presence' },
+          { id: 'email-support', label: 'Email support address + response SLA' },
+          { id: 'kb-portal', label: 'Public knowledge base / help center' },
+          { id: 'nps-csat', label: 'NPS / CSAT program in place' },
+        ],
+        gaps: [
+          'Recurring "no one called me back" reviews = intake dead-drop.',
+          'No public KB = every question is a phone call.',
+          '24/7 needed but franchisees answer at 3am = quality collapse.',
+        ],
+        tools: ['Zendesk', 'Freshdesk', 'Intercom', 'HubSpot Service Hub', 'Podium', 'Front']
+      },
+    ]
+  },
+  {
+    id: 'franchise-dev', number: '11', title: 'Franchise Development',
+    summary: 'The sales team that recruits new franchisees. Their own funnel is a Weam use-case, too.',
+    groups: [
+      {
+        id: 'recruit-funnel', title: 'Franchise recruitment funnel',
+        hint: 'How prospective franchisees discover the brand → tour → sign.',
+        checks: [
+          { id: 'dev-site', label: 'Dedicated franchise-development site URL' },
+          { id: 'lead-mag', label: 'Lead magnet / discovery packet' },
+          { id: 'discovery-day', label: 'Discovery day process' },
+          { id: 'brokers', label: 'Franchise-broker partnerships (FBA / IFPG / FranNet)' },
+          { id: 'projected-24', label: 'Projected new units next year (FDD Item 20 Table 5)' },
+          { id: 'fees', label: 'Initial franchise fee (FDD Item 5)' },
+          { id: 'target-mkt', label: 'Target markets called out in dev materials' },
+        ],
+        gaps: [
+          'Discovery-day prospect follow-up is often manual — that\'s a Weam pitch back to the dev team itself.',
+          'Broker-heavy vs direct-inbound funnel = different lead volume, different qualification burden.',
+        ],
+        tools: ['FranConnect Sales', 'Salesforce for franchise dev', 'FranchiseSoft', 'Meaningful']
+      },
+    ]
+  },
+  {
+    id: 'franchisee-voice', number: '12', title: 'Franchisee Voice',
+    summary: 'What franchisees say when corporate isn\'t listening. The realest signal available for franchise brands.',
+    groups: [
+      {
+        id: 'sentiment-sources', title: 'Sentiment sources',
+        hint: 'Multi-source rule applies here even more than elsewhere — one angry voice is noise, three converging is signal.',
+        checks: [
+          { id: 'fbr-score', label: 'Franchise Business Review satisfaction score (if disclosed)' },
+          { id: 'bluemaumau', label: 'BlueMauMau coverage of the brand' },
+          { id: 'unhappy-fr', label: 'UnhappyFranchisee.com listing' },
+          { id: 'reddit', label: 'Reddit r/franchise / brand-specific subreddit mentions' },
+          { id: 'fb-groups', label: 'Facebook franchisee group (search "[brand] franchisees")' },
+          { id: 'ex-franchisee-calls', label: 'Direct outreach to 2-3 named franchisees (FDD Item 20 contact list)', priority: true },
+        ],
+        gaps: [
+          'Any single named complaint (e.g., "the reporting portal is broken") appearing in 3+ sources is gold.',
+          'Ex-franchisee LinkedIn profiles often list "reasons why I left" in their own posts.',
+        ],
+        tools: ['BlueMauMau', 'UnhappyFranchisee', 'Reddit', 'Facebook groups', 'FDD Item 20 franchisee contact list']
+      },
+    ]
+  },
+  {
+    id: 'fdd', number: '13', title: 'FDD Deep Read',
+    summary: 'For US franchise brands, the FDD is the ground truth. Item-by-item map with the signals Weam cares about.',
+    fddTable: true,
+    groups: [
+      {
+        id: 'fdd-checks', title: 'FDD reading checklist',
+        hint: 'Free access via state databases (Wisconsin is most complete) or aggregators like FranChimp and FDD Exchange.',
+        checks: [
+          { id: 'fdd-year', label: 'Latest FDD year located and downloaded', priority: true },
+          { id: 'fdd-source', label: 'Source cited (state DB or aggregator)' },
+          { id: 'fdd-item-1', label: 'Item 1: parent + affiliates read' },
+          { id: 'fdd-item-2', label: 'Item 2: leadership backgrounds captured' },
+          { id: 'fdd-item-3', label: 'Item 3: litigation reviewed for franchisee-adverse patterns' },
+          { id: 'fdd-item-6', label: 'Item 6: fee structure (royalty %, tech fee, marketing fund %) captured' },
+          { id: 'fdd-item-11', label: 'Item 11: mandated tech stack extracted', priority: true },
+          { id: 'fdd-item-19', label: 'Item 19: unit-level revenue captured (avg, quartiles, N reporting)', priority: true },
+          { id: 'fdd-item-20-t1', label: 'Item 20 Table 1: systemwide open/close trend' },
+          { id: 'fdd-item-20-t3', label: 'Item 20 Table 3: openings & closures by state' },
+          { id: 'fdd-item-20-t5', label: 'Item 20 Table 5: projected openings' },
+          { id: 'fdd-item-20-list', label: 'Item 20 franchisee contact list saved (for direct outreach)' },
+        ],
+        gaps: [
+          'Item 3 franchisee suits are often the loudest gap-signal in the whole document.',
+          'Item 11 mandated tech ≠ what franchisees actually use — always cross-check with reviews / job posts.',
+          'Item 19 median vs mean often reveals a top-heavy distribution (a few big units carry the number).',
+        ],
+        tools: ['Wisconsin DFI', 'Minnesota CARDS', 'California DFPI', 'Virginia SCC', 'FranChimp', 'FDD Exchange', 'VettedBiz', 'Sharpsheets']
+      },
+    ]
+  },
+  {
+    id: 'ai-opportunity', number: '14', title: 'AI Opportunity Mapping',
+    summary: 'Convert findings into Weam-shaped opportunities. Every entry sorted as Fact, Assumption, or Hypothesis.',
+    groups: [
+      {
+        id: 'ai-hypotheses', title: 'Opportunity hypotheses',
+        hint: 'For each pattern observed, name the workflow, the evidence, the owner, and the Weam product-line mapping.',
+        checks: [
+          { id: 'ai-local-mkt', label: 'Local marketing opportunity documented (with evidence + owner)' },
+          { id: 'ai-reputation', label: 'Reputation-management opportunity documented' },
+          { id: 'ai-lead-intake', label: 'Lead intake / voice-agent opportunity documented' },
+          { id: 'ai-rollups', label: 'Franchisee reporting rollup opportunity documented' },
+          { id: 'ai-onboard-kb', label: 'Franchisee support / knowledge-assistant opportunity documented' },
+          { id: 'ai-royalty', label: 'Royalty audit / reconciliation opportunity documented' },
+          { id: 'ai-recruit', label: 'Technician recruiting / screening opportunity documented' },
+          { id: 'ai-claims', label: 'Insurance-claim doc processing opportunity (restoration only)' },
+        ],
+        gaps: [
+          'Every hypothesis must name the observed evidence + the specific owner-title at the target company.',
+          'Reasons-not-to-buy: what would falsify this hypothesis?',
+        ],
+        tools: []
+      },
+    ]
+  },
+  {
+    id: 'decision-maker', number: '15', title: 'Decision-Maker Finder',
+    summary: 'One contact per problem, not five. Match the AI opportunity to the person who owns that budget line.',
+    decisionMatrix: true,
+    groups: []
+  },
+  {
+    id: 'handoff', number: '16', title: 'Sales Handoff',
+    summary: 'Everything the sales rep needs to walk into a conversation confident. The final artifact this console produces.',
+    groups: [
+      {
+        id: 'trigger', title: 'Reason for outreach',
+        hint: 'One specific, evidence-backed trigger. Not "you seem like a good fit."',
+        checks: [
+          { id: 'trigger-line', label: 'Trigger sentence written (evidence + why now)', priority: true },
+          { id: 'trigger-source', label: 'Trigger source cited (URL, date, page number)' },
+        ],
+        gaps: [],
+        tools: []
+      },
+      {
+        id: 'primary-hypothesis', title: 'Primary AI opportunity hypothesis',
+        hint: 'The single strongest hypothesis you\'re leading with. Labeled as hypothesis, not fact.',
+        checks: [
+          { id: 'primary-picked', label: 'Primary hypothesis selected (from Section 14)', priority: true },
+          { id: 'evidence-list', label: 'Evidence bullets (2-3, each with source)' },
+          { id: 'weam-map', label: 'Weam workflow this maps to (from Weam services catalog)' },
+        ],
+        gaps: [],
+        tools: []
+      },
+      {
+        id: 'contact', title: 'Recommended contact',
+        hint: 'The one person to email or LinkedIn-message first. From Section 15.',
+        checks: [
+          { id: 'contact-name', label: 'Name + title' },
+          { id: 'contact-channel', label: 'Best channel (LinkedIn / email / warm intro)' },
+          { id: 'contact-reason', label: 'Why this contact owns this problem' },
+        ],
+        gaps: [],
+        tools: []
+      },
+      {
+        id: 'open-questions', title: 'Open questions & gaps',
+        hint: 'Everything you couldn\'t verify. Sales should know what NOT to assume.',
+        checks: [
+          { id: 'gaps-listed', label: 'Every "not found" from this console listed', priority: true },
+          { id: 'assumptions-listed', label: 'All Assumption-tagged findings flagged for the rep' },
+        ],
+        gaps: [],
+        tools: []
+      },
+    ]
+  },
+];
+
+/* ─────────────────────────────────────────────────────────────
+   FDD REFERENCE (rendered as a table inside Section 13)
+   ───────────────────────────────────────────────────────────── */
+
+const FDD_ITEMS = [
+  { item: '1', starred: false, what: 'Franchisor & parents/affiliates', signal: 'Ownership tree, subsidiaries, brand family' },
+  { item: '2', starred: false, what: 'Business experience', signal: 'Leadership bios + tenures; ex-employer patterns (Neighborly, Authority Brands, ServiceTitan alums are common)' },
+  { item: '3', starred: true,  what: 'Litigation', signal: 'Franchisee lawsuits, FTC / state AG actions — direct pain signal' },
+  { item: '4', starred: false, what: 'Bankruptcy', signal: 'Financial distress in exec team' },
+  { item: '5', starred: false, what: 'Initial fees', signal: 'Franchise fee — unit-economics indicator' },
+  { item: '6', starred: true,  what: 'Other fees', signal: 'Royalty %, tech fee, marketing fund %, transfer fee — reveals recurring cost structure and franchisee sensitivity' },
+  { item: '7', starred: false, what: 'Estimated initial investment', signal: 'Total unit build-out cost profile' },
+  { item: '8', starred: false, what: 'Restrictions on sources', signal: 'Approved suppliers list — vendor landscape and rebate opportunities' },
+  { item: '9', starred: false, what: 'Franchisee obligations table', signal: 'Every operational thing the franchisee must do — a manual-work map' },
+  { item: '10', starred: false, what: 'Financing', signal: 'Whether corporate offers or brokers financing' },
+  { item: '11', starred: true,  what: 'Franchisor\'s assistance, advertising, computer systems, training', signal: 'THE mandated tech stack — POS / CRM / FSM / reporting / LMS all named here. Highest-value single page in the FDD.' },
+  { item: '12', starred: false, what: 'Territory', signal: 'Protection, e-commerce carve-outs, territory encroachment rules' },
+  { item: '13', starred: false, what: 'Trademarks', signal: 'Brand family and IP portfolio' },
+  { item: '14', starred: false, what: 'Patents / copyrights', signal: 'IP moats (specialty products, proprietary systems)' },
+  { item: '15', starred: false, what: 'Owner participation', signal: 'Owner-operator vs semi-absentee expectation — signals franchisee attention span' },
+  { item: '16', starred: false, what: 'Restrictions on what franchisee may sell', signal: 'Menu/scope constraints — opportunity for upsell workflows' },
+  { item: '17', starred: false, what: 'Renewal, termination, transfer, dispute resolution', signal: 'Exit friction and dispute posture' },
+  { item: '18', starred: false, what: 'Public figures', signal: 'Celebrity endorsers (usually blank for home services)' },
+  { item: '19', starred: true,  what: 'Financial performance representations (FPR)', signal: 'Average / median unit revenue, quartiles, N reporting units — profitability and dispersion' },
+  { item: '20', starred: true,  what: 'Outlets and franchisee info (5 tables + contact list)', signal: 'T1 systemwide trend, T3 by-state open/close/transfer, T5 projected openings, plus the full franchisee contact list — call three of them.' },
+  { item: '21', starred: false, what: 'Financial statements', signal: 'Franchisor\'s own audited financials — reveals corporate health' },
+  { item: '22', starred: false, what: 'Contracts', signal: 'Every franchise agreement template attached' },
+  { item: '23', starred: false, what: 'Receipts', signal: 'Signed acknowledgment (mostly procedural)' },
+];
+
+/* ─────────────────────────────────────────────────────────────
+   DECISION-MAKER MATRIX
+   ───────────────────────────────────────────────────────────── */
+
+const DECISION_MAP = [
+  {
+    problem: 'Local marketing / GBP / reviews',
+    titles: 'CMO · VP Marketing · Director of Local Marketing · Head of Franchisee Marketing Support · Director of Digital'
+  },
+  {
+    problem: 'Field ops / dispatch / rollups',
+    titles: 'COO · VP Operations · VP Franchisee Success · Director of Field Operations · Head of Business Coaching'
+  },
+  {
+    problem: 'Technology / data / integrations',
+    titles: 'CTO · CIO · VP Digital · VP Technology · Director of Enterprise Applications · Head of Data'
+  },
+  {
+    problem: 'Royalty / financial rollups',
+    titles: 'CFO · VP Finance · Controller · Director of Franchise Finance · Head of Royalty Audit'
+  },
+  {
+    problem: 'Franchise development / recruiting',
+    titles: 'Chief Development Officer · VP Franchise Development · Director of Franchise Sales'
+  },
+  {
+    problem: 'HR / recruiting / training',
+    titles: 'CHRO · VP People · VP Talent · Director of Talent Acquisition · Director of Learning & Development'
+  },
+  {
+    problem: 'Customer support / call center',
+    titles: 'VP Customer Experience · Head of Contact Center · Director of Support Operations'
+  },
+];
+
+/* ─────────────────────────────────────────────────────────────
+   SOURCES DRAWER
+   ───────────────────────────────────────────────────────────── */
+
+const SOURCES = [
+  {
+    heading: 'FDD — free state databases',
+    items: [
+      { name: 'Wisconsin DFI Franchise Search', url: 'https://apps.dfi.wi.gov/apps/FranchiseSearch/MainSearch.aspx', note: 'Most complete free repository — start here.' },
+      { name: 'Minnesota Commerce CARDS', url: 'https://www.cards.commerce.state.mn.us/CARDS/', note: 'Free, no login.' },
+      { name: 'California DFPI DocQNet', url: 'https://docqnet.dfpi.ca.gov/', note: 'Free, requires free account.' },
+      { name: 'Virginia SCC (SCC eFile)', url: 'https://scc.virginia.gov/pages/Securities-Franchise-and-Retail-Franchising', note: 'Free.' },
+      { name: 'Maryland Securities Division', url: 'https://www.marylandattorneygeneral.gov/pages/Securities/franchise.aspx', note: 'Free.' },
+      { name: 'Washington DFI', url: 'https://dfi.wa.gov/securities/franchise', note: 'Free.' },
+      { name: 'Indiana Securities Division', url: 'https://www.in.gov/sos/securities/franchise/', note: 'Free.' },
+    ]
+  },
+  {
+    heading: 'FDD — aggregators',
+    items: [
+      { name: 'FranChimp', url: 'https://franchimp.com', note: '18,000+ FDDs, free.' },
+      { name: 'FDD Exchange', url: 'https://fddexchange.com', note: 'Curated summaries, some free.' },
+      { name: 'VettedBiz', url: 'https://www.vettedbiz.com', note: 'Investment-angle summaries.' },
+      { name: 'Sharpsheets', url: 'https://sharpsheets.io', note: 'Concise per-brand FDD digests.' },
+      { name: 'Franchise Panda', url: 'https://franchisepanda.com', note: 'Aggregator + search.' },
+    ]
+  },
+  {
+    heading: 'Rankings & satisfaction',
+    items: [
+      { name: 'Franchise Times Top 400', url: 'https://www.franchisetimes.com/top-400/', note: 'Annual systemwide-sales ranking.' },
+      { name: 'Entrepreneur Franchise 500', url: 'https://www.entrepreneur.com/franchise500', note: 'Annual list.' },
+      { name: 'Franchise Business Review', url: 'https://franchisebusinessreview.com', note: 'Franchisee-satisfaction survey data.' },
+      { name: 'Franchise Direct', url: 'https://www.franchisedirect.com', note: 'Directory + FDD summaries.' },
+      { name: 'International Franchise Association (IFA)', url: 'https://www.franchise.org', note: 'Trade body + news.' },
+    ]
+  },
+  {
+    heading: 'Franchisee sentiment',
+    items: [
+      { name: 'BlueMauMau', url: 'https://www.bluemaumau.org', note: 'Long-running franchisee news + discussion.' },
+      { name: 'UnhappyFranchisee.com', url: 'https://www.unhappyfranchisee.com', note: 'Investigative franchisee-complaint site.' },
+      { name: 'Reddit r/franchise', url: 'https://www.reddit.com/r/franchise/', note: 'Also brand-specific subs (r/servpro, r/handyman, etc.)' },
+      { name: 'Franchise Chatter', url: 'https://www.franchisechatter.com', note: 'FDD-driven brand reviews with recent-year data.' },
+    ]
+  },
+  {
+    heading: 'Podcasts — home services operators',
+    items: [
+      { name: 'The Home Service Expert (Tommy Mello)', url: 'https://homeserviceexpert.com/podcast/', note: 'A1 Garage CEO interviews trade operators.' },
+      { name: 'To The Point Home Services (Chris Yano)', url: 'https://rynostrategic.com/podcast/', note: 'RYNO Strategic — marketing-heavy.' },
+      { name: 'Waste No Day (Burton / Minnich)', url: 'https://www.wastenoday.com/podcast', note: 'HVAC / plumbing focus.' },
+      { name: 'Contractor Evolution (Breakthrough Academy)', url: 'https://btacademy.com/podcast/', note: 'Trade contractor growth.' },
+      { name: 'CEO Warrior Podcast', url: 'https://www.ceowarrior.com/podcast/', note: 'Mike Agugliaro on trades leadership.' },
+      { name: 'Service Industry Success (Brigham Dickinson)', url: 'https://powerselling.com/podcast/', note: 'Home-service sales training.' },
+      { name: 'The Contractor Fight (Tom Reber)', url: 'https://thecontractorfight.com/podcast/', note: 'Contractor mindset + margins.' },
+      { name: 'Successful Life Podcast (Corey Berrier)', url: 'https://www.coreyberrier.com/podcast', note: 'Sales for home-service operators.' },
+    ]
+  },
+  {
+    heading: 'Podcasts — franchise-focused',
+    items: [
+      { name: 'Franchise Interviews (Marty McDermott)', url: 'https://franchiseinterviews.com', note: 'Long-running founder + CEO interviews.' },
+      { name: 'Multi-Unit Franchisee Insight', url: 'https://www.franchising.com/podcasts/', note: 'MUFC ecosystem.' },
+      { name: 'The Franchise Insiders (Jack + Jill Johnson)', url: 'https://thefranchiseinsiders.com/podcast/', note: 'Franchise-buyer POV.' },
+      { name: 'Boldly Franchise', url: 'https://www.boldlyfranchise.com', note: 'Emerging-brand founders.' },
+      { name: 'The Franchise King (Joel Libava)', url: 'https://www.thefranchiseking.com', note: 'Franchise-buyer perspective.' },
+    ]
+  },
+  {
+    heading: 'YouTube channels',
+    items: [
+      { name: 'ServiceTitan channel', url: 'https://www.youtube.com/@ServiceTitan', note: 'Interviews with top home-services operators.' },
+      { name: 'Contractor Growth Network', url: 'https://www.youtube.com/@ContractorGrowthNetwork', note: 'Trade marketing.' },
+      { name: 'Home Service Millionaire (Tommy Mello)', url: 'https://www.youtube.com/@TommyMello', note: 'A1 Garage.' },
+      { name: 'Nexstar Network', url: 'https://www.youtube.com/@nexstarnetwork', note: 'Trade operator best-practices.' },
+    ]
+  },
+  {
+    heading: 'Conferences (leadership speaks publicly)',
+    items: [
+      { name: 'IFA Annual Convention', url: 'https://www.franchise.org/events/ifa-convention', note: 'Every franchise CEO shows up.' },
+      { name: 'Multi-Unit Franchising Conference (MUFC)', url: 'https://www.franchising.com/mufc/', note: 'Multi-unit franchisee-facing.' },
+      { name: 'ServiceTitan Pantheon', url: 'https://www.servicetitan.com/pantheon', note: 'Trades operator conference.' },
+      { name: 'Service World Expo', url: 'https://serviceworldexpo.com', note: 'HVAC / plumbing / electric.' },
+      { name: 'Nexstar Super Meeting', url: 'https://nexstarnetwork.com/super-meeting/', note: 'Nexstar members only.' },
+      { name: 'Restoration Industry Association Convention', url: 'https://www.restorationindustry.org', note: 'Restoration franchises.' },
+    ]
+  },
+  {
+    heading: 'Trade publications',
+    items: [
+      { name: 'Franchise Times', url: 'https://www.franchisetimes.com', note: 'Franchise-industry news of record.' },
+      { name: '1851 Franchise', url: 'https://1851franchise.com', note: 'Deep-dive brand coverage + FDD summaries.' },
+      { name: 'Franchising World (IFA)', url: 'https://www.franchise.org/franchising-world', note: 'IFA members magazine.' },
+      { name: 'QSR Magazine', url: 'https://www.qsrmagazine.com', note: 'Food-service adjacent but same operator problems.' },
+      { name: 'Restoration & Remediation Magazine', url: 'https://www.randrmagonline.com', note: 'Restoration vertical.' },
+      { name: 'Cleanfax', url: 'https://cleanfax.com', note: 'Carpet cleaning + restoration.' },
+      { name: 'ACHR News', url: 'https://www.achrnews.com', note: 'HVAC news.' },
+      { name: 'Plumbing & Mechanical Magazine', url: 'https://www.pmmag.com', note: 'Plumbing operator news.' },
+      { name: 'ProRemodeler', url: 'https://www.proremodeler.com', note: 'Remodeling / bath / kitchen.' },
+      { name: 'Qualified Remodeler', url: 'https://www.qualifiedremodeler.com', note: 'Remodeling operators.' },
+    ]
+  },
+  {
+    heading: 'Customer intelligence',
+    items: [
+      { name: 'Google Reviews (Business Profile)', url: 'https://www.google.com/business/', note: 'Aggregate rating + drill on 1-star patterns.' },
+      { name: 'Yelp', url: 'https://www.yelp.com', note: 'Especially strong for consumer services.' },
+      { name: 'Better Business Bureau', url: 'https://www.bbb.org', note: 'Complaints + accreditation status.' },
+      { name: 'Trustpilot', url: 'https://www.trustpilot.com', note: 'National-brand reviews.' },
+      { name: 'ConsumerAffairs', url: 'https://www.consumeraffairs.com', note: 'Complaint archives for larger brands.' },
+    ]
+  },
+  {
+    heading: 'Hiring intelligence',
+    items: [
+      { name: 'Indeed', url: 'https://www.indeed.com', note: 'Volume + role-mix; sort by date.' },
+      { name: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', note: 'Filter by function to see priorities.' },
+      { name: 'Glassdoor', url: 'https://www.glassdoor.com', note: 'Culture + recurring pain themes.' },
+      { name: 'Team Engine', url: 'https://www.teamengine.io', note: 'Trades-specific ATS — signal of modernization.' },
+      { name: 'Trade Hounds', url: 'https://tradehounds.com', note: 'Trades network for candidate discovery.' },
+    ]
+  },
+  {
+    heading: 'Tech-stack sniffing',
+    items: [
+      { name: 'BuiltWith', url: 'https://builtwith.com', note: 'Website tech profile.' },
+      { name: 'Wappalyzer', url: 'https://www.wappalyzer.com', note: 'Browser extension version is fast.' },
+      { name: 'StackShare', url: 'https://stackshare.io', note: 'When they self-report.' },
+    ]
+  },
+  {
+    heading: 'PE / ownership research',
+    items: [
+      { name: 'Crunchbase', url: 'https://www.crunchbase.com', note: 'Ownership + funding history.' },
+      { name: 'PitchBook (paid)', url: 'https://pitchbook.com', note: 'Deepest PE ownership data.' },
+      { name: 'PrivCo', url: 'https://www.privco.com', note: 'Private-company financials.' },
+      { name: 'SEC EDGAR', url: 'https://www.sec.gov/edgar/searchedgar/companysearch', note: 'Only public ones (FirstService, a few others).' },
+    ]
+  },
+  {
+    heading: 'Press wires',
+    items: [
+      { name: 'PR Newswire', url: 'https://www.prnewswire.com', note: 'Search by brand.' },
+      { name: 'Business Wire', url: 'https://www.businesswire.com', note: '' },
+      { name: 'GlobeNewswire', url: 'https://www.globenewswire.com', note: '' },
+      { name: 'BizJournals (regional)', url: 'https://www.bizjournals.com', note: 'Local business-journal coverage of expansions.' },
+    ]
+  },
+];
+
+/* ─────────────────────────────────────────────────────────────
+   STATE MANAGEMENT
+   ───────────────────────────────────────────────────────────── */
+
+const STORE_KEY = 'weam-research-console-v1';
+const API_BASE = '/api/companies';
+let store = { currentCompany: '', companies: {} };
+let currentKey = '';
+let renameTimer = null;
+
+/* ─────────────────────────────────────────────────────────────
+   SERVER SYNC — source of truth is the backend/Postgres now.
+   localStorage is kept only as a same-session offline cache so a
+   network blip doesn't blank the screen; it is never the source of truth.
+   ───────────────────────────────────────────────────────────── */
+
+async function apiListCompanies() {
+  const res = await fetch(API_BASE);
+  if (!res.ok) throw new Error('list failed: ' + res.status);
+  return res.json();
+}
+async function apiCreateCompany(name) {
+  const res = await fetch(API_BASE, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  if (!res.ok) throw new Error('create failed: ' + res.status);
+  return res.json();
+}
+async function apiUpdateCompany(id, c) {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ meta: c.meta, checks: c.checks, notes: c.notes, buckets: c.buckets, dm: c.dm }),
+  });
+  if (!res.ok) throw new Error('update failed: ' + res.status);
+  return res.json();
+}
+async function apiRenameCompany(id, newName) {
+  return fetch(`${API_BASE}/${id}/rename`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ new_name: newName }),
+  });
+}
+
+function fromApiDoc(doc) {
+  const meta = Object.assign(
+    { name: doc.name, category: '', locations: '', corporate: '', franchised: '', country: 'US', notes: '' },
+    doc.meta || {}
+  );
+  meta.name = doc.name; // server's `name` column is authoritative identity
+  return {
+    _id: doc.id,
+    meta,
+    checks: doc.checks || {},
+    notes: doc.notes || {},
+    buckets: doc.buckets || {},
+    dm: doc.dm || {},
+    updated: doc.updated_at,
+  };
+}
+
+async function bootStore() {
+  // seed from local cache first so there's something to render even fully offline
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) store = JSON.parse(raw);
+  } catch (e) {}
+  if (!store.companies) store.companies = {};
+
+  try {
+    const docs = await apiListCompanies();
+    const fresh = {};
+    docs.forEach(doc => { fresh[doc.name] = fromApiDoc(doc); });
+    store.companies = fresh;
+    localStorage.setItem(STORE_KEY, JSON.stringify(store));
+  } catch (e) {
+    toast('Offline — showing last local cache. Changes may not be saved.');
+  }
+}
+
+function syncCurrentCompanyToServer() {
+  const c = currentCompany();
+  if (!c) return;
+  (async () => {
+    try {
+      if (c._id) {
+        const doc = await apiUpdateCompany(c._id, c);
+        c.updated = doc.updated_at;
+      } else {
+        const created = await apiCreateCompany(currentKey);
+        c._id = created.id;
+        const full = await apiUpdateCompany(c._id, c);
+        c.updated = full.updated_at;
+      }
+      localStorage.setItem(STORE_KEY, JSON.stringify(store));
+    } catch (e) {
+      toast('Not saved — connection lost. Will retry on next edit.');
+    }
+  })();
+}
+
+function scheduleRenameSync(c, newName, previousName) {
+  clearTimeout(renameTimer);
+  renameTimer = setTimeout(() => syncRenameToServer(c, newName, previousName), 400);
+}
+
+async function syncRenameToServer(c, attemptedName, previousName) {
+  if (!c._id) return; // not created server-side yet — the next save creates it with this name already
+  try {
+    const res = await apiRenameCompany(c._id, attemptedName);
+    if (res.status === 409) {
+      toast(`"${attemptedName}" is already in use — reverted to "${previousName}"`);
+      if (store.companies[attemptedName] === c) delete store.companies[attemptedName];
+      store.companies[previousName] = c;
+      c.meta.name = previousName;
+      if (currentKey === attemptedName) currentKey = previousName;
+      updateCompanyName();
+      const nameInput = document.getElementById('meta-name');
+      if (nameInput) nameInput.value = previousName;
+      return;
+    }
+    if (!res.ok) throw new Error('rename failed: ' + res.status);
+    const doc = await res.json();
+    c.updated = doc.updated_at;
+    localStorage.setItem(STORE_KEY, JSON.stringify(store));
+  } catch (e) {
+    toast('Rename not saved — connection lost. Will retry on next edit.');
+  }
+}
+
+function persistStore() {
+  store.currentCompany = currentKey;
+  localStorage.setItem(STORE_KEY, JSON.stringify(store));
+  syncCurrentCompanyToServer();
+}
+function blankCompany(name) {
+  return {
+    meta: { name, category: '', locations: '', corporate: '', franchised: '', country: 'US', notes: '' },
+    checks: {}, notes: {}, buckets: {},
+    dm: {}, // decision-maker contact fields
+    updated: new Date().toISOString(),
+  };
+}
+function currentCompany() {
+  if (!currentKey || !store.companies[currentKey]) return null;
+  return store.companies[currentKey];
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RENDER
+   ───────────────────────────────────────────────────────────── */
+
+function el(tag, attrs = {}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (v !== null && v !== undefined) e.setAttribute(k, v);
+  }
+  for (const c of children.flat()) {
+    if (c === null || c === undefined) continue;
+    e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  }
+  return e;
+}
+
+function renderNav() {
+  const list = document.getElementById('navList');
+  list.innerHTML = '';
+  SECTIONS.forEach(s => {
+    const a = el('a', { href: `#${s.id}` },
+      el('span', { class: 'nav-num' }, s.number),
+      el('span', {}, s.title),
+      el('span', { class: 'nav-dot', id: `dot-${s.id}` })
+    );
+    list.appendChild(el('li', {}, a));
+  });
+}
+
+function renderMeta() {
+  const c = currentCompany();
+  const meta = c ? c.meta : { name: '', category: '', locations: '', corporate: '', franchised: '', country: 'US', notes: '' };
+  return el('div', {},
+    el('div', { class: 'meta-grid' },
+      metaField('Company name', 'meta-name', meta.name, 'text'),
+      metaField('Home Services category', 'meta-category', meta.category, 'select',
+        ['— select —', 'Window Treatments', 'Flooring', 'Restoration', 'Plumbing', 'Electrical', 'HVAC & IAQ', 'Interior Painting', 'Handyman', 'Residential Cleaning', 'Carpet & Upholstery Cleaning', 'Closets & Organization', 'Kitchen & Bath Remodel', 'Appliance Repair', 'Drywall / Wall & Ceiling', 'Basement Finishing / Waterproofing', 'Smart Home / Low-Voltage']),
+      metaField('Total US locations', 'meta-locations', meta.locations, 'number'),
+      metaField('Corporate-owned', 'meta-corporate', meta.corporate, 'number'),
+      metaField('Franchised', 'meta-franchised', meta.franchised, 'number'),
+      metaField('US-based parent?', 'meta-country', meta.country, 'select', ['US', 'Non-US parent', 'Unknown'])
+    ),
+    el('textarea', { class: 'notes', id: 'meta-notes', placeholder: 'One-paragraph company summary — the elevator pitch you\'d give a colleague walking to the coffee machine.' }, meta.notes || '')
+  );
+}
+function metaField(label, id, value, type, options) {
+  let control;
+  if (type === 'select') {
+    control = el('select', { id });
+    options.forEach(o => control.appendChild(el('option', { value: o === '— select —' ? '' : o, selected: (value || '') === (o === '— select —' ? '' : o) ? '' : null }, o)));
+  } else {
+    control = el('input', { id, type, value: value || '', placeholder: type === 'number' ? '—' : '' });
+  }
+  return el('div', { class: 'meta-field' }, el('label', { for: id }, label), control);
+}
+
+function renderChecks(groupPath, group) {
+  const c = currentCompany();
+  const wrap = el('div', { class: 'checks' });
+  group.checks.forEach(chk => {
+    const id = `${groupPath}.${chk.id}`;
+    const checked = c && c.checks[id];
+    const label = el('label', { class: 'chk' },
+      el('input', { type: 'checkbox', 'data-id': id, ...(checked ? { checked: '' } : {}) }),
+      el('span', { class: 'chk-label' }, chk.label, chk.priority ? el('span', { class: 'priority-star', title: 'Priority item' }, ' ★') : null)
+    );
+    wrap.appendChild(label);
+  });
+  return wrap;
+}
+
+function renderSideCards(group) {
+  const cards = [];
+  if (group.gaps && group.gaps.length) {
+    cards.push(el('div', { class: 'side-card warn' },
+      el('div', { class: 'side-card-title' }, 'Gaps to hunt'),
+      el('ul', {}, group.gaps.map(g => el('li', {}, g)))
+    ));
+  }
+  if (group.tools && group.tools.length) {
+    cards.push(el('div', { class: 'side-card' },
+      el('div', { class: 'side-card-title' }, 'Systems often seen'),
+      el('div', {}, group.tools.map(t => el('span', { class: 'tool' }, t)))
+    ));
+  }
+  return cards;
+}
+
+function renderBucketBlock(path) {
+  const c = currentCompany();
+  const list = (c && c.buckets[path]) || [];
+  const block = el('div', { class: 'bucket-block' });
+  const title = el('div', { class: 'bucket-title' },
+    el('span', {}, 'Findings — tag as Fact / Assumption / Hypothesis'),
+    el('span', { class: 'bucket-key' },
+      el('span', { class: 'k-fact' }, 'Fact'),
+      el('span', { class: 'k-assumption' }, 'Assumption'),
+      el('span', { class: 'k-hypothesis' }, 'Hypothesis')
+    )
+  );
+  block.appendChild(title);
+  const entries = el('div', { class: 'bucket-entries' });
+  block.appendChild(entries);
+  function renderEntry(entry, idx) {
+    const e = el('div', { class: 'bucket-entry' },
+      (() => {
+        const sel = el('select', { class: entry.tag.toLowerCase(),
+          onChange: (ev) => { list[idx].tag = ev.target.value; sel.className = ev.target.value.toLowerCase(); saveCurrent(); }
+        });
+        ['FACT','ASSUMPTION','HYPOTHESIS'].forEach(t => sel.appendChild(el('option', { value: t, selected: t === entry.tag ? '' : null }, t)));
+        return sel;
+      })(),
+      el('div', { class: 'fields' },
+        el('input', { type: 'text', value: entry.text || '', placeholder: 'Finding (one line)',
+          onInput: (ev) => { list[idx].text = ev.target.value; saveCurrentDebounced(); } }),
+        el('input', { type: 'text', class: 'source', value: entry.source || '', placeholder: 'Source — cite specifically (URL / FDD Item / press release date)',
+          onInput: (ev) => { list[idx].source = ev.target.value; saveCurrentDebounced(); } }),
+      ),
+      el('button', { class: 'rm', title: 'Remove',
+        onClick: () => { list.splice(idx, 1); saveCurrent(); rerenderBucket(); } }, '×')
+    );
+    return e;
+  }
+  function rerenderBucket() {
+    entries.innerHTML = '';
+    list.forEach((entry, i) => entries.appendChild(renderEntry(entry, i)));
+  }
+  rerenderBucket();
+  const add = el('button', { class: 'bucket-add',
+    onClick: () => {
+      list.push({ tag: 'FACT', text: '', source: '' });
+      const cc = currentCompany();
+      if (cc) { cc.buckets[path] = list; saveCurrent(); }
+      rerenderBucket();
+    }
+  }, '＋ Add finding');
+  block.appendChild(add);
+  const cc = currentCompany();
+  if (cc && !cc.buckets[path]) cc.buckets[path] = list;
+  return block;
+}
+
+function renderFDDTable() {
+  const wrap = el('div', { class: 'fdd-wrap' });
+  const table = el('table', { class: 'fdd' });
+  const thead = el('thead', {}, el('tr', {},
+    el('th', {}, 'Item'),
+    el('th', {}, 'What\'s inside'),
+    el('th', {}, 'Signal for Weam research')
+  ));
+  const tbody = el('tbody');
+  FDD_ITEMS.forEach(row => {
+    tbody.appendChild(el('tr', { class: row.starred ? 'starred' : '' },
+      el('td', {}, row.item),
+      el('td', {}, row.what),
+      el('td', { class: 'signal' }, row.signal)
+    ));
+  });
+  table.appendChild(thead); table.appendChild(tbody);
+  wrap.appendChild(table);
+  return wrap;
+}
+
+function renderDecisionMatrix() {
+  const c = currentCompany();
+  const wrap = el('div', { class: 'dm-grid' });
+  DECISION_MAP.forEach((row, i) => {
+    const key = `dm.${i}`;
+    const saved = (c && c.dm[key]) || { name: '', title: '', channel: '' };
+    const rowEl = el('div', { class: 'dm-row' },
+      el('div', {},
+        el('div', { class: 'dm-problem' }, row.problem),
+        el('div', { class: 'dm-titles' }, row.titles)
+      ),
+      el('div', {},
+        el('div', { style: 'font-size:11px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:600' }, 'Named contact'),
+        el('div', { class: 'dm-input' },
+          el('input', { type: 'text', placeholder: 'Name', value: saved.name,
+            onInput: (e) => { const cc = currentCompany(); if (!cc) return; cc.dm[key] = { ...saved, name: e.target.value }; saveCurrentDebounced(); Object.assign(saved, { name: e.target.value }); }
+          }),
+          el('input', { type: 'text', placeholder: 'Title', value: saved.title,
+            onInput: (e) => { const cc = currentCompany(); if (!cc) return; cc.dm[key] = { ...saved, title: e.target.value }; saveCurrentDebounced(); Object.assign(saved, { title: e.target.value }); }
+          }),
+          el('input', { type: 'text', placeholder: 'Best channel + URL', value: saved.channel,
+            onInput: (e) => { const cc = currentCompany(); if (!cc) return; cc.dm[key] = { ...saved, channel: e.target.value }; saveCurrentDebounced(); Object.assign(saved, { channel: e.target.value }); }
+          }),
+        )
+      )
+    );
+    wrap.appendChild(rowEl);
+  });
+  return wrap;
+}
+
+function renderGroup(sectionId, group) {
+  const path = `${sectionId}.${group.id}`;
+  const c = currentCompany();
+  const noteVal = (c && c.notes[path]) || '';
+  const body = el('div', { class: 'group-body' },
+    el('div', {},
+      renderChecks(path, group),
+      el('textarea', { class: 'notes', 'data-notes-id': path, placeholder: 'Notes — what you found, where, and what it means.' }, noteVal),
+      renderBucketBlock(path)
+    ),
+    el('div', {}, renderSideCards(group))
+  );
+  return el('div', { class: 'group' },
+    el('h3', {}, group.title),
+    el('p', { class: 'group-hint' }, group.hint || ''),
+    body
+  );
+}
+
+function renderSection(s) {
+  const section = el('section', { id: s.id });
+  section.appendChild(el('header', {},
+    el('span', { class: 'sec-num' }, s.number),
+    el('div', {},
+      el('h2', {}, s.title),
+      el('p', { class: 'sec-summary' }, s.summary)
+    ),
+    el('div', { class: 'sec-progress' },
+      el('span', { id: `pct-${s.id}` }, '0%'),
+      el('div', { class: 'bar' }, el('div', { class: 'bar-fill', id: `bar-${s.id}` }))
+    )
+  ));
+  if (s.meta) section.appendChild(renderMeta());
+  if (s.fddTable) section.appendChild(renderFDDTable());
+  if (s.decisionMatrix) section.appendChild(renderDecisionMatrix());
+  s.groups.forEach(g => section.appendChild(renderGroup(s.id, g)));
+  return section;
+}
+
+function renderAll() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  SECTIONS.forEach(s => root.appendChild(renderSection(s)));
+  hookEvents();
+  updateProgress();
+  renderCompanyPicker();
+  updateCompanyName();
+}
+
+/* ─────────────────────────────────────────────────────────────
+   EVENTS
+   ───────────────────────────────────────────────────────────── */
+
+let saveTimer = null;
+function saveCurrentDebounced() { clearTimeout(saveTimer); saveTimer = setTimeout(saveCurrent, 300); }
+function saveCurrent() {
+  const c = currentCompany();
+  if (!c) return;
+  c.updated = new Date().toISOString();
+  persistStore();
+  renderCompanyPicker();
+  updateVerdict();
+  updateProgress();
+}
+
+function hookEvents() {
+  // checkboxes
+  document.querySelectorAll('input[type=checkbox][data-id]').forEach(input => {
+    input.addEventListener('change', (e) => {
+      const c = currentCompany();
+      if (!c) { e.target.checked = false; toast('Enter a company name first'); return; }
+      c.checks[e.target.dataset.id] = e.target.checked;
+      saveCurrent();
+    });
+  });
+  // notes
+  document.querySelectorAll('textarea[data-notes-id]').forEach(t => {
+    t.addEventListener('input', (e) => {
+      const c = currentCompany();
+      if (!c) return;
+      c.notes[e.target.dataset.notesId] = e.target.value;
+      saveCurrentDebounced();
+    });
+  });
+  // meta fields
+  ['name','category','locations','corporate','franchised','country'].forEach(f => {
+    const el = document.getElementById(`meta-${f}`);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      const c = currentCompany();
+      if (!c) return;
+      c.meta[f] = el.value;
+      if (f === 'name') {
+        const newName = el.value.trim();
+        if (newName && newName !== currentKey) {
+          const previousKey = currentKey;
+          store.companies[newName] = c;
+          if (currentKey && currentKey !== newName) delete store.companies[currentKey];
+          currentKey = newName;
+          if (c._id && previousKey) scheduleRenameSync(c, newName, previousKey);
+        }
+      }
+      saveCurrent();
+      updateCompanyName();
+    });
+  });
+  const metaNotes = document.getElementById('meta-notes');
+  if (metaNotes) metaNotes.addEventListener('input', () => {
+    const c = currentCompany();
+    if (!c) return;
+    c.meta.notes = metaNotes.value;
+    saveCurrentDebounced();
+  });
+  // scrollspy
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = document.querySelector(`.nav-list a[href="#${entry.target.id}"]`);
+      if (link && entry.isIntersecting) {
+        document.querySelectorAll('.nav-list a').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+  document.querySelectorAll('section').forEach(s => observer.observe(s));
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PROGRESS + ICP VERDICT
+   ───────────────────────────────────────────────────────────── */
+
+function totalChecks() {
+  let total = 0;
+  SECTIONS.forEach(s => s.groups.forEach(g => total += g.checks.length));
+  return total;
+}
+function checkedCount(scope, company) {
+  const c = company !== undefined ? company : currentCompany();
+  if (!c) return 0;
+  let count = 0;
+  const prefix = scope ? scope + '.' : '';
+  Object.entries(c.checks).forEach(([k, v]) => {
+    if (v && (!scope || k.startsWith(prefix))) count++;
+  });
+  return count;
+}
+function completionPct(company) {
+  const total = totalChecks();
+  return total ? Math.round(checkedCount(null, company) / total * 100) : 0;
+}
+function updateProgress() {
+  const total = totalChecks();
+  const done = checkedCount();
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const ring = document.getElementById('overallRing');
+  if (ring) { ring.style.setProperty('--p', pct); document.getElementById('overallPct').textContent = pct + '%'; }
+  SECTIONS.forEach(s => {
+    let sTotal = 0; s.groups.forEach(g => sTotal += g.checks.length);
+    const sDone = checkedCount(s.id);
+    const sPct = sTotal ? Math.round(sDone / sTotal * 100) : 0;
+    const pctEl = document.getElementById('pct-' + s.id);
+    const barEl = document.getElementById('bar-' + s.id);
+    if (pctEl) pctEl.textContent = sTotal ? (sPct + '%') : '—';
+    if (barEl) barEl.style.width = sPct + '%';
+    const dot = document.getElementById('dot-' + s.id);
+    if (dot) {
+      dot.classList.remove('done', 'partial');
+      if (sTotal && sDone === sTotal) dot.classList.add('done');
+      else if (sDone > 0) dot.classList.add('partial');
+    }
+  });
+}
+
+function updateVerdict() {
+  const badge = document.getElementById('verdictBadge');
+  const label = document.getElementById('verdictLabel');
+  const reason = document.getElementById('verdictReason');
+  const c = currentCompany();
+  badge.className = 'verdict-badge unknown';
+  if (!c) { label.textContent = 'ICP unknown'; reason.textContent = 'Add a company to begin.'; return; }
+  const m = c.meta;
+  const loc = parseInt(m.locations || '0', 10);
+  const nonUS = m.country && m.country !== 'US';
+  const missing = [];
+  if (!m.name) missing.push('name');
+  if (!m.locations) missing.push('location count');
+  if (!m.country) missing.push('country');
+  if (missing.length) {
+    label.textContent = 'ICP unknown';
+    reason.textContent = 'Missing: ' + missing.join(', ') + '.';
+    return;
+  }
+  let verdict = 'pass', reasonText = '';
+  if (nonUS) { verdict = 'fail'; reasonText = `${m.country} — Weam ICP is US-based brands only.`; }
+  else if (loc < 10) { verdict = 'fail'; reasonText = `${loc} locations — below the 10-location floor.`; }
+  else if (loc > 200) { verdict = 'fail'; reasonText = `${loc} locations — above the 200 cap.`; }
+  else if (loc >= 180 && loc <= 200) { verdict = 'borderline'; reasonText = `${loc} locations — inside band but near the cap. Flag before pursuing.`; }
+  else { verdict = 'pass'; reasonText = `${loc} US locations — inside the 10-200 band. Multi-location profile fits.`; }
+  badge.className = 'verdict-badge ' + verdict;
+  label.textContent = verdict === 'pass' ? 'ICP fit' : verdict === 'borderline' ? 'ICP borderline' : 'ICP miss';
+  reason.textContent = reasonText;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   COMPANY SWITCHER
+   ───────────────────────────────────────────────────────────── */
+
+function renderCompanyPicker() {
+  const sel = document.getElementById('companyPicker');
+  const names = Object.keys(store.companies).sort();
+  sel.innerHTML = '';
+  sel.appendChild(el('option', { value: '__new' }, '＋ New company…'));
+  names.forEach(n => sel.appendChild(el('option', { value: n, selected: n === currentKey ? '' : null }, n)));
+}
+function switchCompany(name) {
+  if (name === '__new') {
+    currentKey = '';
+    document.getElementById('companyName').value = '';
+    document.getElementById('companyName').focus();
+    renderAll();
+    return;
+  }
+  if (!store.companies[name]) return;
+  currentKey = name;
+  persistStore();
+  renderAll();
+}
+function updateCompanyName() {
+  const input = document.getElementById('companyName');
+  if (input) input.value = currentKey || '';
+}
+
+document.getElementById('companyPicker').addEventListener('change', (e) => switchCompany(e.target.value));
+document.getElementById('companyName').addEventListener('change', (e) => {
+  const name = e.target.value.trim();
+  if (!name) return;
+  if (!store.companies[name]) {
+    store.companies[name] = blankCompany(name);
+    currentKey = name;
+    persistStore();
+    renderAll();
+  } else {
+    switchCompany(name);
+  }
+});
+
+document.getElementById('saveBtn').addEventListener('click', () => { saveCurrent(); toast('Saved'); });
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!currentKey) return;
+  if (!confirm(`Reset ALL research for "${currentKey}"? This cannot be undone.`)) return;
+  store.companies[currentKey] = blankCompany(currentKey);
+  persistStore();
+  renderAll();
+  toast('Reset');
+});
+
+/* ─────────────────────────────────────────────────────────────
+   EXPORT: MARKDOWN BRIEF
+   ───────────────────────────────────────────────────────────── */
+
+function exportBrief() {
+  const c = currentCompany();
+  if (!c) return toast('Nothing to export');
+  const m = c.meta;
+  const lines = [];
+  lines.push(`# ${m.name || 'Untitled company'} — Weam Research Brief`);
+  lines.push(`> Generated ${new Date().toISOString().slice(0,10)} · ${Object.values(c.checks).filter(Boolean).length}/${totalChecks()} checks complete`);
+  lines.push('');
+  lines.push(`- **Category:** ${m.category || '—'}`);
+  lines.push(`- **US locations:** ${m.locations || '—'} (corporate: ${m.corporate || '—'} · franchised: ${m.franchised || '—'})`);
+  lines.push(`- **Parent country:** ${m.country || '—'}`);
+  lines.push('');
+  if (m.notes) { lines.push(`**Summary.** ${m.notes}`); lines.push(''); }
+
+  // ICP verdict
+  const badge = document.getElementById('verdictBadge');
+  const verdict = badge.className.split(' ').pop();
+  const reason = document.getElementById('verdictReason').textContent;
+  lines.push(`## ICP Verdict — ${verdict.toUpperCase()}`);
+  lines.push(reason);
+  lines.push('');
+
+  // Per section: findings (buckets) + notes
+  SECTIONS.forEach(s => {
+    let sHas = false;
+    const buf = [];
+    s.groups.forEach(g => {
+      const path = `${s.id}.${g.id}`;
+      const note = (c.notes[path] || '').trim();
+      const bucket = c.buckets[path] || [];
+      if (note || bucket.length) {
+        sHas = true;
+        buf.push(`### ${g.title}`);
+        if (bucket.length) {
+          bucket.forEach(b => {
+            if (!b.text) return;
+            const src = b.source ? ` _(source: ${b.source})_` : '';
+            buf.push(`- **[${b.tag}]** ${b.text}${src}`);
+          });
+        }
+        if (note) buf.push(note);
+        buf.push('');
+      }
+    });
+    if (sHas) {
+      lines.push(`## ${s.number} — ${s.title}`);
+      lines.push(...buf);
+    }
+  });
+
+  // Decision-maker
+  const dmLines = [];
+  DECISION_MAP.forEach((row, i) => {
+    const d = c.dm[`dm.${i}`];
+    if (d && (d.name || d.title || d.channel)) {
+      dmLines.push(`- **${row.problem}** → ${d.name || '—'}, ${d.title || '—'} · ${d.channel || '—'}`);
+    }
+  });
+  if (dmLines.length) {
+    lines.push('## Decision-Maker Map');
+    lines.push(...dmLines);
+    lines.push('');
+  }
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(m.name || 'company').replace(/[^a-z0-9]+/gi,'_')}_Weam_Brief.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+document.getElementById('exportBtn').addEventListener('click', exportBrief);
+
+/* ─────────────────────────────────────────────────────────────
+   THEME
+   ───────────────────────────────────────────────────────────── */
+document.getElementById('themeBtn').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : cur === 'light' ? '' : 'dark';
+  if (next) document.documentElement.setAttribute('data-theme', next);
+  else document.documentElement.removeAttribute('data-theme');
+  localStorage.setItem('weam-console-theme', next);
+});
+const savedTheme = localStorage.getItem('weam-console-theme');
+if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+/* ─────────────────────────────────────────────────────────────
+   SEARCH FILTER
+   ───────────────────────────────────────────────────────────── */
+document.getElementById('searchBox').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('label.chk').forEach(l => {
+    const text = l.textContent.toLowerCase();
+    l.classList.toggle('hidden', q && !text.includes(q));
+  });
+  document.querySelectorAll('section').forEach(sec => {
+    const anyVisible = sec.querySelectorAll('label.chk:not(.hidden)').length > 0;
+    if (q) sec.classList.toggle('hidden', !anyVisible);
+    else sec.classList.remove('hidden');
+  });
+});
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    document.getElementById('searchBox').focus();
+  }
+});
+
+/* ─────────────────────────────────────────────────────────────
+   TOAST
+   ───────────────────────────────────────────────────────────── */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SOURCES DRAWER
+   ───────────────────────────────────────────────────────────── */
+function renderDrawer() {
+  const body = document.getElementById('drawerBody');
+  body.innerHTML = '';
+  body.appendChild(el('p', { style: 'color:var(--ink-muted);margin:0 0 16px;font-style:italic;' },
+    'Pull from 3–4 categories minimum per account. Cross-reference every claim; date every finding.'));
+  SOURCES.forEach(s => {
+    body.appendChild(el('h3', {}, s.heading));
+    const ul = el('ul');
+    s.items.forEach(i => {
+      const li = el('li', {});
+      li.appendChild(el('a', { href: i.url, target: '_blank', rel: 'noopener' }, i.name));
+      if (i.note) li.appendChild(document.createTextNode(' — ' + i.note));
+      ul.appendChild(li);
+    });
+    body.appendChild(ul);
+  });
+}
+const drawer = document.getElementById('drawer');
+const scrim = document.getElementById('drawerScrim');
+document.getElementById('drawerBtn').addEventListener('click', () => { drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden','false'); });
+document.getElementById('drawerClose').addEventListener('click', () => { drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); });
+scrim.addEventListener('click', () => { drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); });
+
+/* ─────────────────────────────────────────────────────────────
+   HISTORY PANEL — every company on record, even half-filled ones.
+   Sourced entirely from store.companies (already loaded in full at
+   boot by bootStore()) — no extra network round-trip on open.
+   ───────────────────────────────────────────────────────────── */
+function formatHistoryTimestamp(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+function renderHistoryPanel() {
+  const body = document.getElementById('historyBody');
+  body.innerHTML = '';
+  const names = Object.keys(store.companies);
+  if (!names.length) {
+    body.appendChild(el('p', { class: 'history-empty' }, 'No companies yet — add one from the top bar to see it here.'));
+    return;
+  }
+  const entries = names
+    .map(name => ({ name, company: store.companies[name] }))
+    .sort((a, b) => new Date(b.company.updated || 0) - new Date(a.company.updated || 0));
+
+  entries.forEach(({ name, company }) => {
+    const isCurrent = name === currentKey;
+    const pct = completionPct(company);
+    const row = el('button', { class: 'history-entry' + (isCurrent ? ' current' : ''), type: 'button' },
+      el('span', {},
+        el('div', { class: 'history-entry-name' }, name + (isCurrent ? ' (current)' : '')),
+        el('div', { class: 'history-entry-meta' }, (company.meta && company.meta.category) || 'Uncategorized')
+      ),
+      el('span', { class: 'history-entry-meta' }, `${pct}% · ${formatHistoryTimestamp(company.updated)}`)
+    );
+    row.addEventListener('click', () => {
+      closeHistoryPanel();
+      if (!isCurrent) switchCompany(name);
+    });
+    body.appendChild(row);
+  });
+}
+function openHistoryPanel() {
+  renderHistoryPanel();
+  console.log('history_opened', { count: Object.keys(store.companies).length });
+  historyDrawer.classList.add('open');
+  historyScrim.classList.add('open');
+  historyDrawer.setAttribute('aria-hidden', 'false');
+}
+function closeHistoryPanel() {
+  historyDrawer.classList.remove('open');
+  historyScrim.classList.remove('open');
+  historyDrawer.setAttribute('aria-hidden', 'true');
+}
+const historyDrawer = document.getElementById('historyDrawer');
+const historyScrim = document.getElementById('historyScrim');
+document.getElementById('historyBtn').addEventListener('click', openHistoryPanel);
+document.getElementById('historyClose').addEventListener('click', closeHistoryPanel);
+historyScrim.addEventListener('click', closeHistoryPanel);
+
+/* ─────────────────────────────────────────────────────────────
+   BOOT
+   ───────────────────────────────────────────────────────────── */
+(async () => {
+  await bootStore();
+  renderNav();
+  renderDrawer();
+  currentKey = store.currentCompany || '';
+  if (currentKey && !store.companies[currentKey]) currentKey = '';
+  renderAll();
+  updateVerdict();
+})();
+</script>
