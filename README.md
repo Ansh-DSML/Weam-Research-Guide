@@ -16,6 +16,59 @@ backend/    FastAPI + Postgres API that the frontend talks to
 logs/       created automatically at runtime (gitignored)
 ```
 
+## Architecture
+
+This is what actually exists and runs today (Phases 0–2) — no planned/future pieces in this
+diagram, those are called out separately below.
+
+```mermaid
+flowchart TB
+    Browser["Browser<br/>Weam_Research_Console.html<br/>(plain HTML/CSS/JS, zero build step)"]
+
+    subgraph Backend["FastAPI backend (backend/app)"]
+        Routers["routers/<br/>companies.py, graph.py, health.py"]
+        Crud["crud.py<br/>company CRUD"]
+        Mapper["graph_mapper.py<br/>structured fields -> graph specs<br/>(free, no network call)"]
+        Pipeline["graph_pipeline.py<br/>BackgroundTask orchestrator"]
+        GraphCrud["graph_crud.py<br/>idempotent node/edge upsert"]
+        Extractor["extraction/<br/>GroqExtractor / FakeExtractor / NullExtractor"]
+    end
+
+    DB[("Postgres<br/>companies, nodes, edges<br/>(docker-compose, Alembic-migrated)")]
+    Groq[["Groq API<br/>(optional - only if GROQ_API_KEYS is set)"]]
+
+    Browser -->|"HTTP, same origin (backend serves the frontend at /)"| Routers
+    Routers --> Crud
+    Crud --> DB
+    Routers -.->|"on create/update/rename, fire-and-forget"| Pipeline
+    Pipeline --> Mapper
+    Mapper --> GraphCrud
+    Pipeline -.->|"only if free text changed since last save"| Extractor
+    Extractor -->|"HTTP"| Groq
+    Extractor --> GraphCrud
+    GraphCrud --> DB
+    Browser -->|"GET /api/companies/{id}/graph"| Routers
+```
+
+What the arrows mean, in plain terms:
+
+- The browser talks to FastAPI over plain HTTP on the same origin — no separate frontend
+  server, no CORS.
+- Every company create/update/rename kicks off graph extraction as a `BackgroundTask`: the
+  save itself returns immediately, extraction happens right after on its own DB session.
+- The structured-field mapper (category, country, decision-maker, ticked checks) always runs —
+  zero cost, zero network.
+- The text extractor (pulls entities out of notes/findings) only runs when the free text
+  actually changed since the last save (a stored sha256 hash) — so it doesn't burn a Groq call
+  on every checkbox toggle, and it's entirely optional: with no `GROQ_API_KEYS` configured, the
+  app runs on `NullExtractor` and the graph still populates fully from structured fields.
+- Everything lands in the same Postgres database — no separate graph database, `nodes`/`edges`
+  are plain tables with uniqueness constraints that make re-running extraction merge into
+  existing rows instead of duplicating.
+
+Full detail (data model, entity resolution, failure isolation, logging) is in
+`ARCHITECTURE.md`.
+
 ## Setting this up after cloning (do this on any new machine, e.g. an office PC)
 
 ### 1. Prerequisites
@@ -135,6 +188,33 @@ entities appear — not just what the automated tests' fake extractor would prod
 Only steps 5, 7 (start Postgres, start uvicorn) are needed on subsequent runs — the venv,
 `.env`, and schema only need to be created once. `docker start weam-research-db` restarts an
 already-created container without needing `docker run` again.
+
+## Roadmap: ask questions against the knowledge graph (planned, not built)
+
+The knowledge graph in Phase 2 only grows — every save adds facts, assumptions, hypotheses,
+people, tools, competitors, without losing anything. The next planned piece turns that into a
+per-company **queryable research wiki**: instead of scrolling the whole record, ask it directly —
+"what gaps are still open here?", "which departments haven't been touched?", "what's the
+strongest thing to target?" — and get an answer grounded in what's actually been entered, not a
+generic guess.
+
+This is an LLM feature, specifically: the LLM is used at *answer time*, not to hold the whole
+graph in its head. Dumping an entire company's graph into a prompt doesn't scale as research
+accumulates — most of it is irrelevant to any one question and token cost grows unbounded. The
+planned design (full detail in `PHASE_3_PLAN.md`):
+
+1. Embed every node/edge's text at write time (`pgvector`, same Postgres database — no separate
+   vector store).
+2. At query time, embed the question, vector-search that company's nodes/edges, expand 1–2 hops
+   over the existing `edges` table.
+3. Serialize only that bounded subgraph as compact triples into the prompt — cost stays flat no
+   matter how large the full graph has grown.
+4. Answer generation reuses the same Groq client/key-rotation already built for extraction — this
+   is a retrieval layer on top of what exists, not a new LLM integration.
+5. Surfaces as `POST /api/companies/{id}/ask`: question in, grounded answer out.
+
+Not started — Phase 2 (storage + extraction) had to be solid first. `PHASE_3_PLAN.md` exists so
+this has a concrete starting point instead of a blank page when it's picked up.
 
 ## More detail
 
